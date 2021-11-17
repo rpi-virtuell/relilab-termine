@@ -21,22 +21,14 @@ function   termineAusgeben( $atts ) {
     <?php
     foreach ($posts as $post) {
         setup_postdata( $post );
-        $date = get_post_meta($post->ID, 'relilab_startdate',true);
-        $dateend = get_post_meta($post->ID, 'relilab_enddate',true);
-        $date = date('d.m.Y H:i', strtotime($date));
-        $dateend = date('H:i', strtotime($dateend));
-        $currenPostMonth = date('M', strtotime($date));
-        if($lastPostMonth == $currenPostMonth)
-            $currenPostMonth = '';
-        else
-            $lastPostMonth = $currenPostMonth;
-        ?>
-        <span class="Monat"> <?php echo getMonat($currenPostMonth) ?>   </span>
-        <li>
-            <span class="Datum"> <?php echo getWochentag($date) . ' ' . $date .' - '. $dateend .' Uhr' ; ?> </span>
-            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-        </li>
-        <?php
+        if (!empty(get_post_meta($post->ID, 'relilab_startdate',true)) && !empty(get_post_meta($post->ID, 'relilab_enddate',true)))
+        {
+            if ($template = locate_template('relilab-Termine'))
+                load_template($template);
+            else
+//            load_template('templates/single_termin_block.php');
+                include 'templates/single-termin-block.php';
+        }
     }
     ?>
 
