@@ -15,6 +15,7 @@ function   termineAusgeben( $atts ) {
         'order'				=> 'ASC'
     ));
     global $post;
+    $lastPostMonth = '';
     ?>
     <ul>
     <?php
@@ -24,7 +25,13 @@ function   termineAusgeben( $atts ) {
         $dateend = get_post_meta($post->ID, 'relilab_enddate',true);
         $date = date('d.m.Y H:i', strtotime($date));
         $dateend = date('H:i', strtotime($dateend));
+        $currenPostMonth = date('M', strtotime($date));
+        if($lastPostMonth == $currenPostMonth)
+            $currenPostMonth = '';
+        else
+            $lastPostMonth = $currenPostMonth;
         ?>
+        <span class="Monat"> <?php echo getMonat($currenPostMonth) ?>   </span>
         <li>
             <span class="Datum"> <?php echo getWochentag($date) . ' ' . $date .' - '. $dateend .' Uhr' ; ?> </span>
             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
@@ -53,4 +60,30 @@ function getWochentag(string $date): string
                             'Sun' => 'Sonntag',
         );
     return $wochentag[date('D',strtotime($date))];
+}
+
+/**
+ * @param string $date
+ * @return string
+ */
+function getMonat(string $date): string
+{
+    $monat = array(
+            'Jan'   => 'Januar',
+            'Feb'   => 'Februar',
+            'Mar'   => 'März',
+            'Apr'   => 'April',
+            'May'   => 'Mai',
+            'Jun'   => 'Juni',
+            'Jul'   => 'Juli',
+            'Aug'   => 'August',
+            'Sep'   => 'September',
+            'Okt'   => 'Oktober',
+            'Nov'   => 'November',
+            'Dec'   => 'Dezember',
+    );
+    if(!empty($date))
+        return $monat[date('M',strtotime($date))];
+    else
+        return '';
 }
