@@ -1,24 +1,20 @@
+<div class="wp-block-column relilab_termin_month">
+   <?php echo RelilabTermine::lastpostmonthcheck(RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate',true))) ?>
+</div>
+
+
 <div class="wp-block-columns has-palette-color-5-background-color has-background">
     <div class="wp-block-column is-vertically-aligned-top" style="flex-basis:200px">
         <div class="wp-block-group relilab_termin_day">
             <p class="has-text-align-center">zur Live Veranstaltung</p>
 
-            <p class="has-text-align-center" style="font-size:40px"><?php echo date('j',strtotime(get_post_meta(get_the_ID(), 'relilab_startdate',true))).'.'; ?></p>
-
-        <h5 class="has-text-align-center">
-             <?php echo RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate',true)) .' '. date('Y', strtotime(get_post_meta(get_the_ID(),'relilab_startdate', true))); ?>
-
-
-        </h5>
-
 
             <p class="has-text-align-center"><?php echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate',true)); ?></p>
-
-            <p class="has-text-align-center"><?php echo date('H:i',strtotime(get_post_meta(get_the_ID(),'relilab_startdate',true))) .' - '. date('H:i',strtotime(get_post_meta(get_the_ID(),'relilab_enddate',true)))?></p>
+            <p class="has-text-align-center"><?php echo date('j',strtotime(get_post_meta(get_the_ID(), 'relilab_startdate',true))).'.'; ?></p>
+        <p class="has-text-align-center"><?php echo RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate',true)) .' '. date('Y', strtotime(get_post_meta(get_the_ID(),'relilab_startdate', true))); ?></p>
+        <p class="has-text-align-center"><?php echo date('H:i',strtotime(get_post_meta(get_the_ID(),'relilab_startdate',true))) .' - '. date('H:i',strtotime(get_post_meta(get_the_ID(),'relilab_enddate',true)))?></p>
 
         </div>
-
-
     </div>
 
     <div class="wp-block-column">
