@@ -1,0 +1,30 @@
+.Datum{
+    font-weight:bold;
+}
+.wp-block-group.relilab_termin_day {
+    background-color: #D52AE9;
+    color: white;
+    padding:10px 0 10px;
+    box-shadow:2px 2px 4px rgba(0,0,0,0.2);
+    border-radius:10px;
+}
+.wp-block-group.relilab_termin_day:hover{
+    background-color: #6189F7;
+    box-shadow:3px 4px 8px rgba(0,0,0,0.3);
+    cursor:pointer;
+}
+.wp-block-group.relilab_termin_day  p:nth-child(2n){
+    margin:0;
+    padding:0;
+    font-size:74px!important;
+    margin-top:-15px;
+    font-weight:bold;
+}
+p:nth-child(1){
+    font-size:13px!important;
+    line-height:10px;
+}
+p:nth-child(2){
+    font-size:13px!important;
+    line-height:10px;
+}
