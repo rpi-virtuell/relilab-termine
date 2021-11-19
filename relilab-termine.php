@@ -1,7 +1,12 @@
 <?php
 include  'relilab-termine-ics.php';
 /**
- *Plugin Name: relilab Termine
+ * Plugin Name: relilab Termine
+ * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
+ * Description: Erstellt Termine aus posts
+ * Version: 1.0
+ * Author: Daniel Reintanz
+ * Licence: GPLv3
  */
 
 class RelilabTermine{
@@ -18,36 +23,41 @@ class RelilabTermine{
         $posts = array(
             'post_type'			=> 'post',
             'posts_per_page'	=> -1,
-            'category'          => 'termine',
+            'category_name'          => 'termine',
             'meta_key'			=> 'relilab_startdate',
             'meta_value'        =>  false,
             'meta_compare'      =>  '!=',
             'orderby'			=> 'meta_value',
             'order'				=> 'ASC',
         );
-        //TODO: WIP fetching only specific category data doesn't work
-        if(isset($_GET['cat'])  && $_GET['cat'] == 'relilab-Talks'){
-            $posts['category'] = 'relilab-Talks';
-            $posts=get_posts($posts);
-        }
-        elseif(isset($_GET['cat'])  && $_GET['cat'] == 'relilab-CAFÉ'){
-            $posts['category'] = 'relilab-CAFÉ';
-            $posts=get_posts($posts);
-        }
-        else
-            $posts=get_posts($posts);
+        $disable_alle = $disable_cafe = $disable_talks = '';
 
-    ?>
+        if(isset($_GET['cat'])){
+          switch ($_GET['cat']){
+              case 'relilab-talks':
+                  $posts['category_name'] = 'relilab-talks';
+                  $disable_talks = 'active';
+                  break;
+              case 'relilab-cafe':
+                  $posts['category_name'] = 'relilab-cafe';
+                  $disable_cafe = 'active';
+                  break;
+          }
+        }else
+            $disable_alle = 'active';
+        ob_start();
+        ?>
         <div class="wp-block-column" >
-            <a class="has-text-align-center" href="<?php echo 'https://test.rpi-virtuell.de/termine/?cat=relilab-Talks'; ?>"><?php echo 'relilab-Talks' ?></a>
+            <a class="has-text-align-center button <?php echo  $disable_alle ?>" href="<?php echo home_url().'/termine/'; ?>" ><?php echo 'Alle Termine' ?></a>
+            <a class="has-text-align-center button <?php echo  $disable_talks ?>" href="<?php echo '?cat=relilab-talks'; ?>"><?php echo 'relilab-Talks' ?></a>
+            <a class="has-text-align-center button <?php echo  $disable_cafe ?>" href="<?php echo '?cat=relilab-cafe'; ?>"><?php echo 'relilab-CAFÉ' ?></a>
+            <a class="has-text-align-center button" href="<?php echo '?relilab-termine-format=ics'; ?>"> 📆 <?php echo 'ICS Datei herunterladen' ?></a>
         </div>
-        <div class="wp-block-column" >
-            <a class="has-text-align-center" href="<?php echo 'https://test.rpi-virtuell.de/termine/?cat=relilab-CAFÉ'; ?>"><?php echo 'relilab-CAFÉ' ?></a>
-        </div>
-    <?php
+        <?php
+
+            $posts=get_posts($posts);
 
 global $post;
-        ob_start();
         ?>
         <ul>
             <?php

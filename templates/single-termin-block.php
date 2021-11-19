@@ -1,11 +1,11 @@
 <div class="wp-block-column relilab_termin_month">
-   <?php echo RelilabTermine::lastpostmonthcheck(RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate',true))) ?>
+   <h3><?php echo RelilabTermine::lastpostmonthcheck(RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate',true))) ?> </h3>
 </div>
 
 
-<div class="wp-block-columns has-palette-color-5-background-color has-background">
+<div class="wp-block-columns relilab_termin_box has-background">
     <div class="wp-block-column is-vertically-aligned-top" style="flex-basis:200px">
-        <div class="wp-block-group relilab_termin_day">
+        <div class="wp-block-group relilab_termin_day" onclick="location.href='<?php echo get_option('options_relilab_zoom_link')?>'">
             <p class="has-text-align-center">zur Live Veranstaltung</p>
 
 
@@ -19,13 +19,14 @@
 
     <div class="wp-block-column">
         <?php if ( has_post_thumbnail() ) : ?>
-            <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-                <?php the_post_thumbnail('medium'); ?>
-            </a>
-        <?php endif ?>
-        <br>
-        <a class="has-text-align-center" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 
+            <div class="wp-block-image">
+                <figure class="aligncenter size-full">
+                   <?php the_post_thumbnail('medium'); ?>
+                </figure>
+            </div>
+        <?php endif ?>
+        <h3 class ="entry-title"><a class="has-text-align-center" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
         <p><?php echo substr(get_the_excerpt(),0 ,150). ' ...'; ?>  </p>
     </div>
 </div>

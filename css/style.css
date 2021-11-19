@@ -1,6 +1,11 @@
 .Datum{
     font-weight:bold;
 }
+.button.active{
+    background-color: #D52AE9;
+    pointer-events: none;
+    cursor: default;
+}
 .wp-block-columns.relilab_termin_month{
     font-size:45px;
     font-style: oblique;
@@ -12,16 +17,28 @@
     box-shadow:2px 2px 4px rgba(0,0,0,0.2);
     border-radius:10px;
 }
+.wp-block-columns.relilab_termin_box{
+    background-color: #ddd;
+    border-radius: 10px;
+}
+.entry-content .relilab_termin_box h3 a{
+    text-decoration: none;
+    font-size: 24px;
+    line-height: 0.5!important;
+}
 .wp-block-group.relilab_termin_day:hover{
     background-color: #6189F7;
     box-shadow:3px 4px 8px rgba(0,0,0,0.3);
     cursor:pointer;
 }
+.wp-block-group.relilab_termin_day p {
+    margin: 0;
+}
 .wp-block-group.relilab_termin_day  p:nth-child(3){
     margin:0;
     padding:0;
     font-size:74px!important;
-    margin-top:-35px;
+    margin-top:-10px;
     margin-bottom: 0px;
     font-weight:bold;
     line-height: 74px;
