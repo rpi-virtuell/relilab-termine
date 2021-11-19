@@ -18,15 +18,19 @@
     </div>
 
     <div class="wp-block-column">
-        <?php if ( has_post_thumbnail() ) : ?>
+        <h3 class ="entry-title"><a class="has-text-align-center" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <p><?php echo substr(get_the_excerpt(),0 ,150). ' ...'; ?>  </p>
+    </div>
+
+    <div class="wp-block-column" style="flex-basis:350px">
+		<?php if ( has_post_thumbnail() ) : ?>
 
             <div class="wp-block-image">
                 <figure class="aligncenter size-full">
-                   <?php the_post_thumbnail('medium'); ?>
+					<?php the_post_thumbnail('medium'); ?>
                 </figure>
             </div>
-        <?php endif ?>
-        <h3 class ="entry-title"><a class="has-text-align-center" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <p><?php echo substr(get_the_excerpt(),0 ,150). ' ...'; ?>  </p>
+		<?php endif ?>
+
     </div>
 </div>
