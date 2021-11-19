@@ -24,7 +24,7 @@ function ical() {
 
             $event = (new Eluceo\iCal\Domain\Entity\Event())
                 ->setSummary($post->post_title)
-                ->setDescription(wp_trim_words(strip_tags($post->post_content),100,'...')."\n\n Zum Live-Event online: https://unilu.zoom.us/j/69796141267?pwd=RFNWMVVOM3VSSDc2Sk9JNlREU1pPUT09")
+                ->setDescription(wp_trim_words(strip_tags($post->post_content),100,'...')."\n\n Zum Live-Event online: ".get_option('options_relilab_zoom_link'))
                 ->setOccurrence(new Eluceo\iCal\Domain\ValueObject\TimeSpan(
                         new Eluceo\iCal\Domain\ValueObject\DateTime(DateTimeImmutable::createFromFormat('Y-m-d H:i:s',fdate($startdate)),true),
                         new Eluceo\iCal\Domain\ValueObject\DateTime(DateTimeImmutable::createFromFormat('Y-m-d H:i:s',fdate($enddate)),true),

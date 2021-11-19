@@ -30,7 +30,7 @@ class RelilabTermine{
             'orderby'			=> 'meta_value',
             'order'				=> 'ASC',
         );
-        $disable_alle = $disable_cafe = $disable_talks = '';
+        $disable_all = $disable_cafe = $disable_talks = '';
 
         if(isset($_GET['cat'])){
           switch ($_GET['cat']){
@@ -44,11 +44,11 @@ class RelilabTermine{
                   break;
           }
         }else
-            $disable_alle = 'active';
+            $disable_all = 'active';
         ob_start();
         ?>
         <div class="wp-block-column" >
-            <a class="has-text-align-center button <?php echo  $disable_alle ?>" href="<?php echo home_url().'/termine/'; ?>" ><?php echo 'Alle Termine' ?></a>
+            <a class="has-text-align-center button <?php echo  $disable_all ?>" href="<?php echo get_permalink(); ?>" ><?php echo 'Alle Termine' ?></a>
             <a class="has-text-align-center button <?php echo  $disable_talks ?>" href="<?php echo '?cat=relilab-talks'; ?>"><?php echo 'relilab-Talks' ?></a>
             <a class="has-text-align-center button <?php echo  $disable_cafe ?>" href="<?php echo '?cat=relilab-cafe'; ?>"><?php echo 'relilab-CAFÉ' ?></a>
             <a class="has-text-align-center button" href="<?php echo '?relilab-termine-format=ics'; ?>"> 📆 <?php echo 'ICS Datei herunterladen' ?></a>
