@@ -1,6 +1,9 @@
 .Datum {
     font-weight: bold;
 }
+.wp-block-column.relilab_termin_header select{
+    width: 33%;
+}
 
 .button.active {
     background-color: #D52AE9;

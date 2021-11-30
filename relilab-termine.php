@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 1.0
+ * Version: 1.1
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -34,23 +34,30 @@ class RelilabTermine
             'orderby' => 'meta_value',
             'order' => 'ASC',
         );
-
-        if (isset($_GET['cat']) && get_category_by_slug($_GET['cat']))
-            $posts['category_name'] = $_GET['cat'];
+        if (isset($_GET['category']) && get_category_by_slug($_GET['category'])) {
+            $posts['category_name'] = $_GET['category'];
+        }
 
         ob_start();
         ?>
-        <div class="wp-block-column">
-            <a class="has-text-align-center button <?php echo $_GET['cat'] == NULL ? 'active' : '' ?>"
-               href="<?php echo get_permalink(); ?>"><?php echo 'Alle Termine' ?></a>
-            <a class="has-text-align-center button <?php echo $_GET['cat'] == 'relilab-talks' ? 'active' : '' ?>"
-               href="<?php echo '?cat=relilab-talks'; ?>"><?php echo 'relilab-Talks' ?></a>
-            <a class="has-text-align-center button <?php echo $_GET['cat'] == 'relilab-cafe' ? 'active' : '' ?>"
-               href="<?php echo '?cat=relilab-cafe'; ?>"><?php echo 'relilab-CAFÉ' ?></a>
-            <a class="has-text-align-center button <?php echo $_GET['cat'] == 'relilab-impuls' ? 'active' : '' ?>"
-               href="<?php echo '?cat=relilab-impuls'; ?>"><?php echo 'relilab-Impuls' ?></a>
+        <div class="wp-block-column relilab_termin_header">
+            <form id="subCategoryForm" name="subForm" method="get">
+                <label for="categorySelector"></label>
+                <select class="select" name="category" id="categorySelector">
+                    <?php
+                    $termineSubCategories = get_categories(
+                        array('parent' => get_category_by_slug('termine')->term_id));
+                    echo '<option value="termine"> Termine </option>';
+                    foreach ($termineSubCategories as $subCategory) {
+                        echo '<option value="' . $subCategory->slug . '"' . ($_GET['category'] == $subCategory->slug ? 'selected' : '') . '>'
+                            . $subCategory->name . '</option>';
+                    }
+                    ?>
+                </select>
+                <input type="submit" value="Filter">
+            </form>
             <a class="has-text-align-center button" href="<?php get_option('relilab_kalendertutorial_url'); ?>">
-                📆 <?php echo 'ICS Datei herunterladen' ?></a>
+                📆 <?php echo 'Kalender einbinden' ?></a>
         </div>
         <?php
 
@@ -62,7 +69,7 @@ class RelilabTermine
             <?php
             foreach ($posts as $post) {
                 setup_postdata($post);
-                {
+                if (time() < strtotime(get_post_meta($post->ID, "relilab_enddate")[0])) {
                     if ($template = locate_template('relilab-Termine'))
                         load_template($template);
                     else
