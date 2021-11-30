@@ -2,7 +2,11 @@
     font-weight: bold;
 }
 .wp-block-column.relilab_termin_header select{
-    width: 33%;
+    width: 30%;
+    min-width: 240px;
+}
+.wp-block-column.relilab_termin_header .button{
+    float: right;
 }
 
 .button.active {

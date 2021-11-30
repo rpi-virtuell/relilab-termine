@@ -49,15 +49,16 @@ class RelilabTermine
                         array('parent' => get_category_by_slug('termine')->term_id));
                     echo '<option value="termine"> Termine </option>';
                     foreach ($termineSubCategories as $subCategory) {
-                        echo '<option value="' . $subCategory->slug . '"' . ($_GET['category'] == $subCategory->slug ? 'selected' : '') . '>'
+                        echo '<option value="' . $subCategory->slug . '"'
+                            . ($_GET['category'] == $subCategory->slug ? 'selected' : '') . '>'
                             . $subCategory->name . '</option>';
                     }
                     ?>
                 </select>
                 <input type="submit" value="Filter">
+                <a class="has-text-align-center button" href="<?php get_option('relilab_kalendertutorial_url'); ?>">
+                    📆 <?php echo 'Kalender einbinden' ?></a>
             </form>
-            <a class="has-text-align-center button" href="<?php get_option('relilab_kalendertutorial_url'); ?>">
-                📆 <?php echo 'Kalender einbinden' ?></a>
         </div>
         <?php
 
