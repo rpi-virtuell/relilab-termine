@@ -116,25 +116,6 @@
                 },
                 "default_value": "",
                 "placeholder": ""
-            },
-            {
-                "key": "field_619bbdda53e02",
-                "label": "",
-                "name": "",
-                "type": "text",
-                "instructions": "",
-                "required": 0,
-                "conditional_logic": 0,
-                "wrapper": {
-                    "width": "",
-                    "class": "",
-                    "id": ""
-                },
-                "default_value": "",
-                "placeholder": "",
-                "prepend": "",
-                "append": "",
-                "maxlength": ""
             }
         ],
         "location": [
