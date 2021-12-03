@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 1.1
+ * Version: 1.2
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -24,19 +24,7 @@ class RelilabTermine
     function termineAusgeben($atts)
     {
 
-        $posts = array(
-            'post_type' => 'post',
-            'posts_per_page' => -1,
-            'category_name' => 'termine',
-            'meta_key' => 'relilab_startdate',
-            'meta_value' => false,
-            'meta_compare' => '!=',
-            'orderby' => 'meta_value',
-            'order' => 'ASC',
-        );
-        if (isset($_GET['category']) && get_category_by_slug($_GET['category'])) {
-            $posts['category_name'] = $_GET['category'];
-        }
+        $posts = self::getTerminePostQuery();
 
         ob_start();
         ?>
@@ -50,7 +38,7 @@ class RelilabTermine
                     echo '<option value="termine"> Termine </option>';
                     foreach ($termineSubCategories as $subCategory) {
                         echo '<option value="' . $subCategory->slug . '"'
-                            . ($_GET['category'] == $subCategory->slug ? 'selected' : '') . '>'
+                            . ($posts['category_name'] == $subCategory->slug ? 'selected' : '') . '>'
                             . $subCategory->name . '</option>';
                     }
                     ?>
@@ -87,6 +75,31 @@ class RelilabTermine
     function enqueue_scripts()
     {
         wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css');
+    }
+
+    /**
+     * @return array
+     */
+    static public function getTerminePostQuery(): array
+    {
+
+        $posts = array(
+            'post_type' => 'post',
+            'posts_per_page' => -1,
+            'category_name' => 'termine',
+            'meta_key' => 'relilab_startdate',
+            'meta_value' => false,
+            'meta_compare' => '!=',
+            'orderby' => 'meta_value',
+            'order' => 'ASC',
+        );
+
+        if (isset($atts['category']) && get_category_by_slug($atts['category']))
+            $posts['category_name'] = $atts['category'];
+        if (isset($_GET['category']) && get_category_by_slug($_GET['category']))
+            $posts['category_name'] = $_GET['category'];
+
+        return $posts;
     }
 
     /**
