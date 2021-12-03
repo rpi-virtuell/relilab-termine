@@ -1,0 +1,16 @@
+{
+    "relilab-termine": {
+        "page_title": "relilab Einstellungen Termine",
+        "menu_slug": "relilab-termine",
+        "menu_title": "relilab Termine",
+        "capability": "edit_posts",
+        "position": "50",
+        "parent_slug": "options-general.php",
+        "icon_url": "",
+        "redirect": true,
+        "post_id": "options",
+        "autoload": false,
+        "update_button": "Speichern",
+        "updated_message": "Einstellungen wurden gespeichert"
+    }
+}
