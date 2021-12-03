@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 1.2
+ * Version: 1.2.1
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -24,7 +24,7 @@ class RelilabTermine
     function termineAusgeben($atts)
     {
 
-        $posts = self::getTerminePostQuery();
+        $posts = self::getTerminePostQuery($atts);
 
         ob_start();
         ?>
@@ -44,7 +44,7 @@ class RelilabTermine
                     ?>
                 </select>
                 <input type="submit" value="Filter">
-                <a class="has-text-align-center button" href="<?php get_option('relilab_kalendertutorial_url'); ?>">
+                <a class="has-text-align-center button" href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
                     📆 <?php echo 'Kalender einbinden' ?></a>
             </form>
         </div>
@@ -58,7 +58,7 @@ class RelilabTermine
             <?php
             foreach ($posts as $post) {
                 setup_postdata($post);
-                if (time() < strtotime(get_post_meta($post->ID, "relilab_enddate")[0])) {
+                if (time() < strtotime(get_post_meta($post->ID, "relilab_enddate")[0]) || $atts['archive'] == 1) {
                     if ($template = locate_template('relilab-Termine'))
                         load_template($template);
                     else
@@ -80,7 +80,7 @@ class RelilabTermine
     /**
      * @return array
      */
-    static public function getTerminePostQuery(): array
+    static public function getTerminePostQuery($atts): array
     {
 
         $posts = array(
