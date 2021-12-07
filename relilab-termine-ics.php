@@ -6,7 +6,6 @@ class RelilabTermineICS
 {
     public static function ical($atts)
     {
-
         if (isset($_GET['relilab-termine-format']) && $_GET['relilab-termine-format'] == 'ics') {
             require_once __DIR__ . '/calendar/autoload.php';
 

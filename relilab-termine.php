@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -44,7 +44,8 @@ class RelilabTermine
                     ?>
                 </select>
                 <input type="submit" value="Filter">
-                <a class="has-text-align-center button" href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
+                <a class="has-text-align-center button"
+                   href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
                     📆 <?php echo 'Kalender einbinden' ?></a>
             </form>
         </div>
