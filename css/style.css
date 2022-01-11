@@ -66,12 +66,12 @@
     padding: 0;
     font-size: 74px !important;
     margin-top: -10px;
-    margin-bottom: 0px;
     font-weight: bold;
     line-height: 74px;
 }
-.wp-block-columns.relilab_termin_box.has-background{
-    display:flex;
+
+.wp-block-columns.relilab_termin_box.has-background {
+    display: flex;
     justify-content: space-around;
 }
 
@@ -83,6 +83,7 @@
 .wp-block-column.relilab_termin_content {
     flex: 1 0 300px;
 }
+
 .wp-block-column.relilab_termin_thumbnail {
     flex: 0 1 200px;
 }

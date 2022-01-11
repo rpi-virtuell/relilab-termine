@@ -6,7 +6,7 @@
 <div class="wp-block-columns relilab_termin_box has-background">
     <div class="wp-block-column relilab_termin_button">
         <div class="wp-block-group relilab_termin_day"
-             onclick="location.href='<?php echo get_option('options_relilab_zoom_link') ?>'">
+             onclick="location.href='<?php echo !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
             <div style="margin: 5px 5px">
                 <p class="has-text-align-center">zur Live Veranstaltung</p>
                 <p class="has-text-align-center"><?php echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate', true)); ?></p>
