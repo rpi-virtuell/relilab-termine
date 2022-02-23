@@ -36,6 +36,22 @@
                 "display_format": "d.m.Y H:i",
                 "return_format": "j.F Y H:i",
                 "first_day": 1
+            },
+            {
+                "key": "field_61dd928890026",
+                "label": "Spezifischer Zoom Link",
+                "name": "relilab_custom_zoom_link",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https:\/\/zoom.com\/example"
             }
         ],
         "location": [
