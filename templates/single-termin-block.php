@@ -20,7 +20,7 @@
     <div class="wp-block-column relilab_termin_content">
         <h3 class="entry-title"><a class="has-text-align-center"
                                    href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <p><?php echo substr(get_the_excerpt(), 0, 150) . ' ...'; ?>  </p>
+        <p><?php echo get_the_excerpt(); ?>  </p>
     </div>
 
     <div class="wp-block-column relilab_termin_thumbnail">

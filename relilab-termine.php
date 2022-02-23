@@ -19,7 +19,20 @@ class RelilabTermine
         add_shortcode('relilab_termine', array($this, 'termineAusgeben'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('init', array('RelilabTermineICS', 'ical'));
+        add_filter('the_content', array($this, 'pushTermineToContent'));
     }
+
+    function pushTermineToContent($content)
+    {
+        $id = get_the_ID();
+        $termineId = get_category_by_slug('termine')->term_id;
+        $termList = array_merge([$termineId], get_term_children($termineId, 'category'));
+        if (has_term($termList, 'category', $id)) {
+            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . get_post_meta($id, "relilab_custom_zoom_link", true) . "'>Zoom Link</a> </p>$content";
+        }
+        return $content;
+    }
+
 
     function termineAusgeben($atts)
     {
