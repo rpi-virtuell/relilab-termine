@@ -28,7 +28,7 @@ class RelilabTermine
         $termineId = get_category_by_slug('termine')->term_id;
         $termList = array_merge([$termineId], get_term_children($termineId, 'category'));
         if (has_term($termList, 'category', $id)) {
-            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') . "'>Zoom Link</a> </p>$content";
+            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option("options_relilab_zoom_link") . "'>Zoom Link</a> </p>$content";
         }
         return $content;
     }
