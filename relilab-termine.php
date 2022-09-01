@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 1.2.4
+ * Version: 2.0.0
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -28,13 +28,12 @@ class RelilabTermine
         $termineId = get_category_by_slug('termine')->term_id;
         $termList = array_merge([$termineId], get_term_children($termineId, 'category'));
         if (has_term($termList, 'category', $id)) {
-            if (!empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) )
-            {
+            if (!empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true))) {
                 $zoom_link = get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true);
-            }else{
-                $zoom_link =  get_option("options_relilab_zoom_link");
+            } else {
+                $zoom_link = get_option("options_relilab_zoom_link");
             }
-            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . $zoom_link  . "'>Zoom Link</a> </p>$content";
+            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
         }
         return $content;
     }
@@ -42,8 +41,16 @@ class RelilabTermine
 
     function termineAusgeben($atts)
     {
-
         $posts = self::getTerminePostQuery($atts);
+
+        if (!isset($_GET['startDate']))
+        {
+            $startDate = date('Y-m-d');
+        }else
+        {
+            $startDate = $_GET['startDate'];
+        }
+
 
         ob_start();
         ?>
@@ -62,7 +69,10 @@ class RelilabTermine
                     }
                     ?>
                 </select>
+                <label for="dateSelector">Startdatum:</label>
+                <input type="date" name="startDate" id="dateSelector" value="<?php echo $startDate ?>">
                 <input type="submit" value="Filter">
+
                 <a class="has-text-align-center button"
                    href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
                     📆 <?php echo 'Kalender einbinden' ?></a>
@@ -71,30 +81,208 @@ class RelilabTermine
         <?php
 
         $posts = get_posts($posts);
-
-        global $post;
         ?>
-        <ul>
+        <div class="relilab-termin-content">
             <?php
-            foreach ($posts as $post) {
-                setup_postdata($post);
-                if (time() < strtotime(get_post_meta($post->ID, "relilab_enddate")[0]) || $atts['archive'] == 1) {
-                    if ($template = locate_template('relilab-Termine'))
-                        load_template($template);
-                    else
-                        load_template(dirname(__FILE__) . '/templates/single-termin-block.php', false);
+
+            $lastPost = end($posts);
+
+            $datesTillLastPost = new DatePeriod(
+                new DateTime(date("Y-m-d",strtotime($startDate))),
+                new DateInterval('P1D'),
+                new DateTime(get_post_meta($lastPost->ID, 'relilab_startdate', true))
+            );
+            $newWeek = true;
+            $newMonth = true;
+
+            foreach ($datesTillLastPost
+
+                     as $date) {
+
+                if ($newMonth) {
+
+                    ?>
+                    <div class="relilab-termin-month">
+                    <h4>
+                        <?php
+                        $newMonth = false;
+                        echo RelilabTermine::getMonat($date->format(DATE_ATOM)) . ' - ' . $date->format('Y');
+                        ?>
+                    </h4>
+
+                    <div class="relilab-termin-month">
+                    <div class="relilab-termin-week-header">
+                        <div class="relilab-termin-Mon">
+                            Montag
+                        </div>
+                        <div class="relilab-termin-Tue">
+                            Dienstag
+                        </div>
+                        <div class="relilab-termin-Wen">
+                            Mittwoch
+                        </div>
+                        <div class="relilab-termin-Thu">
+                            Donnerstag
+                        </div>
+                        <div class="relilab-termin-Fri">
+                            Freitag
+                        </div>
+                        <div class="relilab-termin-Sat">
+                            Samstag
+                        </div>
+                        <div class="relilab-termin-Sun">
+                            Sonntag
+                        </div>
+
+                    </div>
+
+                    <div class="relilab-termin-week"> <?php
+                    $newWeek = false;
+                    $whileDate = strtotime('Monday');
+                    while (date('D', $whileDate) != $date->format('D')) {
+                        ?>
+                        <div class="relilab-termin-spacer relilab-termin-<?php echo date('D', $whileDate); ?>"></div>  <?php
+                        $whileDate = strtotime(date('D', $whileDate) . '+1 days');
+                    }
                 }
+
+            if ($newWeek) {
+                ?>
+                <div class="relilab-termin-week"> <?php
+                $newWeek = false;
+            }
+                //Search for post with $data as relilab_startdate
+
+                $postIds = array_column($posts, 'relilab_startdate', 'ID');
+
+                foreach ($postIds as $key => $value) {
+                    if (date("Y-m-d", strtotime($value)) != $date->format("Y-m-d"))
+                        unset($postIds[$key]);
+                }
+                if (!empty($postIds)) {
+
+
+                    ?>
+                    <div class="relilab-termin-box relilab-termin-filled relilab-termin-<?php echo $date->format('D'); ?>">
+                        <div class="relilab-termin-date">
+                            <div class="relilab-termin-day">
+                                <?php echo $date->format('j') . '. '; ?>
+                            </div>
+                        </div>
+                        <div class="relilab-termin-details">
+                            <div class="relilab-termin-details-header">
+                                <?php
+                                $timestamp = $date->format(DATE_ATOM);
+                                echo RelilabTermine::getWochentag($timestamp) . ' ' . $date->format('j') . '. ' . RelilabTermine::getMonat($timestamp);
+                                ?>
+                            </div>
+                            <?php
+                            foreach ($postIds
+
+                                     as $postId => $termin) {
+                                $terminPost = get_post($postId);
+                                ?>
+                                <div class="relilab-termin-thumbnail"
+                                     style="background-image: url('<?php echo get_the_post_thumbnail_url($postId) ?>')">
+                                    <div class="relilab-termin-daytime">
+                                        <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
+                                        <br>
+                                        <a class="relilab-termin-title"
+                                           href="<?php echo get_post_permalink($postId) ?>">
+                                            <?php
+                                            echo $terminPost->post_title ?>
+                                        </a>
+                                    </div>
+
+                                    <div class="wp-block-group relilab-meeting-button"
+                                         onclick="location.href='<?php echo !empty(get_post_meta($postId, "relilab_custom_zoom_link", true)) ? get_post_meta($postId, "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
+                                        👉 Zur Live Veranstaltung 👈
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+
+                } else {
+
+                    ?>
+                    <div class="relilab-termin-box relilab-termin-empty relilab-termin-<?php echo $date->format('D'); ?>">
+                        <div class="relilab-termin-date">
+                            <div class="relilab-termin-day">
+                                <?php echo $date->format('j') . '. '; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+
+                }
+            if ($date->format('D') === 'Sun') {
+                ?> </div> <?php
+                $newWeek = true;
+            }
+
+                if ($date->format('t') === $date->format('d')) {
+                    if (!$newWeek) {
+
+                        $whileDate = $date->format('D');
+                        while ($whileDate != date('D', strtotime('Monday'))) {
+                            ?>
+                            <div class="relilab-termin-spacer relilab-termin-<?php echo $whileDate; ?>"></div>  <?php
+                            $whileDate = date('D', strtotime($whileDate . '+1 days'));
+                        }
+
+                        ?> </div> <?php
+                        ?> </div> <?php
+                    }
+                    ?> </div> <?php
+                    $newMonth = true;
+                    $newWeek = true;
+                }
+
             }
             ?>
-        </ul>
+        </div>
         <?php
-        wp_reset_postdata();
+
+
+//        foreach ($posts as $post) {
+//
+//
+//            $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true));
+//            if (RelilabTermine::has_month_changed($currentMonth)) {
+//
+        ?>
+        <!--                <div class="wp-block-column relilab_termin_month">-->
+        <!--                    <h3> --><?php //echo $currentMonth
+        ?><!-- </h3>-->
+        <!--                </div>-->
+        <!--                --><?php
+//            }
+//
+//            setup_postdata($post);
+//
+//            // Archive check & Filter for Termine which already ended
+//            if (time() < strtotime(get_post_meta($post->ID, "relilab_enddate", true)) || $atts['archive'] == 1) {
+//                if ($template = locate_template('relilab-Termine'))
+//                    load_template($template);
+//                else
+//                    load_template(dirname(__FILE__) . '/templates/single-termin-block.php', false);
+//            }
+//        }
+//
+        ?>
+        <!--        --><?php
+//        wp_reset_postdata();
         return ob_get_clean();
     }
 
     function enqueue_scripts()
     {
         wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css');
+        wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), false, true);
     }
 
     /**
@@ -113,6 +301,7 @@ class RelilabTermine
             'orderby' => 'meta_value',
             'order' => 'ASC',
         );
+
 
         if (isset($atts['category']) && get_category_by_slug($atts['category']))
             $posts['category_name'] = $atts['category'];
@@ -166,13 +355,12 @@ class RelilabTermine
             return '';
     }
 
-    static function lastpostmonthcheck(string $currenPostMonth)
+    static function has_month_changed(string $currenPostMonth)
     {
         if (self::$lastPostMonth == $currenPostMonth)
-            $currenPostMonth = '';
+            return false;
         else
-            self::$lastPostMonth = $currenPostMonth;
-        return $currenPostMonth;
+            return true;
     }
 
 }

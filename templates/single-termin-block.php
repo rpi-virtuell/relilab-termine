@@ -1,7 +1,7 @@
-<div class="wp-block-column relilab_termin_month">
-    <h3><?php echo RelilabTermine::lastpostmonthcheck(RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true))) ?> </h3>
-</div>
+<?php
 
+// TODO: Deprecated Needs to be refactored or deleted WIP
+?>
 
 <div class="wp-block-columns relilab_termin_box has-background">
     <div class="wp-block-column relilab_termin_button">
@@ -32,6 +32,7 @@
                 </figure>
             </div>
         <?php endif ?>
+
 
     </div>
 </div>

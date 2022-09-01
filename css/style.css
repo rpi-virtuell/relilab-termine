@@ -1,89 +1,150 @@
-.Datum {
+
+.relilab-termin-month {
+    background: lightgrey;
+    padding: 5px;
+    border-radius: 3px;
+    margin-top: 15px;
+}
+
+.relilab-termin-week-header {
+    background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: medium;
+    border-radius: 3px;
+}
+
+.relilab-termin-week-header div {
+    padding: 10px;
+    border-left: 2px #cc208e solid;
+    border-right: 2px #6713d2 solid;
+}
+.relilab-termin-week-header .relilab-termin-Sun{
+    border-right: unset;
+}
+.relilab-termin-week-header .relilab-termin-Mon{
+    border-left: unset;
+}
+
+.relilab-termin-box {
+    box-shadow: 0 4px 24px #0000000a;
+    padding: 5px;
+    border-radius: 3px;
+    color: white;
+    background: #29333c;
+}
+
+.relilab-termin-filled {
+    background: linear-gradient(90deg, #d225f8, #ff8103) !important;
     font-weight: bold;
 }
 
-.wp-block-column.relilab_termin_header select {
-    width: 30%;
-    min-width: 240px;
-}
-
-.wp-block-column.relilab_termin_header .button {
-    float: right;
-}
-
-.button.active {
-    background-color: #D52AE9;
-    pointer-events: none;
-    cursor: default;
-}
-
-.wp-block-columns.relilab_termin_month {
-    font-size: 45px;
-    font-style: oblique;
-}
-
-.wp-block-group.relilab_termin_day {
-    background-color: #D52AE9;
-    color: white;
-    padding: 10px 0 10px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-.wp-block-columns.relilab_termin_box {
-    background-color: #ddd;
-    border-radius: 10px;
-}
-
-.entry-content .relilab_termin_box h3 a {
-    text-decoration: none;
-    font-size: 24px;
-    line-height: 0.5 !important;
-}
-
-.relilab_termin_box h3.entry-title {
-    margin: 0;
-    margin-bottom: 20px;
-    line-height: 1;
-}
-
-.relilab_termin_box p {
-    line-height: 1.3;
-}
-
-.wp-block-group.relilab_termin_day:hover {
-    background-color: #6189F7;
-    box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.3);
+.relilab-termin-filled:hover, .relilab-termin-filled:hover :not(div, a, img) {
+    background: #6713d2 !important;
     cursor: pointer;
 }
 
-.wp-block-group.relilab_termin_day p {
-    margin: 0;
+.relilab-termin-week {
+    display: grid;
+    grid-template-areas: 'Mon Tue Wen Thu Fri Sat Sun';
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 5px;
+    margin: 5px;
+
 }
 
-.wp-block-group.relilab_termin_day p:nth-child(3) {
-    margin: 0;
-    padding: 0;
-    font-size: 74px !important;
-    margin-top: -10px;
+.relilab-termin-week, .relilab-termin-week-header {
+    display: grid;
+    grid-template-areas: 'Mon Tue Wen Thu Fri Sat Sun';
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.relilab-termin-week {
+    text-align: center;
+    min-width: 50px;
+    min-height: 50px;
+}
+
+.relilab-termin-Mon {
+    grid-area: Mon;
+}
+
+.relilab-termin-Tue {
+    grid-area: Tue;
+}
+
+.relilab-termin-Wen {
+    grid-area: Wen;
+}
+
+.relilab-termin-Thu {
+    grid-area: Thu;
+}
+
+.relilab-termin-Fri {
+    grid-area: Fri;
+}
+
+.relilab-termin-Sat {
+    grid-area: Sat;
+}
+
+.relilab-termin-Sun {
+    grid-area: Sun;
+}
+
+.relilab-termin-details {
+    display: none;
+    position: absolute;
+    background: gray;
+    border-radius: 3px;
+    padding-bottom: 15px;
+    cursor: default;
+}
+
+.relilab-termin-details-header {
+    background: black;
+    padding: 10px;
+}
+
+.relilab-termin-thumbnail {
+    margin-top: 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding: 20px;
+    background-position: center;
+}
+
+.relilab-termin-daytime {
+    background: darkgrey;
+    margin: auto;
     font-weight: bold;
-    line-height: 74px;
+    font-size: larger;
+    opacity: .9;
 }
 
-.wp-block-columns.relilab_termin_box.has-background {
-    display: flex;
-    justify-content: space-around;
+.relilab-termin-title {
+    font-weight: bold;
+    font-size: large;
 }
 
-.wp-block-column.relilab_termin_button {
-    flex: 0 0 175px;
-    align-self: center;
+.relilab-meeting-button {
+    background: linear-gradient(90deg, #d225f8, #ff8103) !important;
+    font-weight: bold;
+    font-size: medium;
+    border-radius: 22px;
+    padding: 5px;
 }
 
-.wp-block-column.relilab_termin_content {
-    flex: 1 0 300px;
+.relilab-meeting-button:hover {
+    filter: brightness(.9) contrast(1.2);
+    cursor: pointer;
 }
 
-.wp-block-column.relilab_termin_thumbnail {
-    flex: 0 1 200px;
+.relilab-termin-focused {
+    display: block !important;
+}
+
+.relilab-termin-focused {
+
 }
