@@ -60,6 +60,7 @@
     grid-template-columns: repeat(7, 1fr);
 }
 
+
 .relilab-termin-week {
     text-align: center;
     min-width: 50px;
@@ -67,6 +68,10 @@
 }
 .relilab-termin-week-header div[class^=relilab-termin-]:after{
     display: none;
+}
+
+.relilab-termin-week-header div {
+    text-align: center;
 }
 
 @media only screen and (max-width: 600px) {
