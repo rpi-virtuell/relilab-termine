@@ -7,6 +7,10 @@
     box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
+.relilab-termin-month h4 {
+    text-align: center;
+}
+
 .relilab-termin-week-header {
     background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
     color: white;
@@ -20,10 +24,12 @@
     border-left: 2px #cc208e solid;
     border-right: 2px #6713d2 solid;
 }
-.relilab-termin-week-header .relilab-termin-Sun{
+
+.relilab-termin-week-header .relilab-termin-Sun {
     border-right: unset;
 }
-.relilab-termin-week-header .relilab-termin-Mon{
+
+.relilab-termin-week-header .relilab-termin-Mon {
     border-left: unset;
 }
 
@@ -66,7 +72,8 @@
     min-width: 50px;
     min-height: 50px;
 }
-.relilab-termin-week-header div[class^=relilab-termin-]:after{
+
+.relilab-termin-week-header div[class^=relilab-termin-]:after {
     display: none;
 }
 
@@ -76,15 +83,16 @@
 
 @media only screen and (max-width: 600px) {
 
-    .relilab-termin-details{
+    .relilab-termin-details {
         left: 10%;
         right: 10%;
     }
 
-    .non-mobile span{
+    .non-mobile span {
         display: none;
     }
-    .relilab-termin-week-header .relilab-termin-Mon:after{
+
+    .relilab-termin-week-header .relilab-termin-Mon:after {
         display: unset !important;
         content: 'Mo';
     }
@@ -178,6 +186,7 @@
     font-weight: bold;
     font-size: larger;
     opacity: .9;
+    border-radius: 3px;
 }
 
 .relilab-termin-title {
@@ -191,6 +200,7 @@
     font-size: medium;
     border-radius: 22px;
     padding: 5px;
+    margin-top: 10px;
 }
 
 .relilab-meeting-button:hover {
