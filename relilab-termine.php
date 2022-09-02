@@ -43,11 +43,9 @@ class RelilabTermine
     {
         $posts = self::getTerminePostQuery($atts);
 
-        if (!isset($_GET['startDate']))
-        {
+        if (!isset($_GET['startDate'])) {
             $startDate = date('Y-m-d');
-        }else
-        {
+        } else {
             $startDate = $_GET['startDate'];
         }
 
@@ -88,7 +86,7 @@ class RelilabTermine
             $lastPost = end($posts);
 
             $datesTillLastPost = new DatePeriod(
-                new DateTime(date("Y-m-d",strtotime($startDate))),
+                new DateTime(date("Y-m-d", strtotime($startDate))),
                 new DateInterval('P1D'),
                 new DateTime(get_post_meta($lastPost->ID, 'relilab_startdate', true))
             );
@@ -109,29 +107,42 @@ class RelilabTermine
                         echo RelilabTermine::getMonat($date->format(DATE_ATOM)) . ' - ' . $date->format('Y');
                         ?>
                     </h4>
-
                     <div class="relilab-termin-month">
                     <div class="relilab-termin-week-header">
-                        <div class="relilab-termin-Mon">
-                            Montag
+                        <div class="relilab-termin-Mon non-mobile">
+                            <span>
+                                Montag
+                            </span>
                         </div>
-                        <div class="relilab-termin-Tue">
-                            Dienstag
+                        <div class="relilab-termin-Tue non-mobile">
+                            <span>
+                                Dienstag
+                            </span>
                         </div>
-                        <div class="relilab-termin-Wen">
-                            Mittwoch
+                        <div class="relilab-termin-Wen non-mobile">
+                            <span>
+                                Mittwoch
+                            </span>
                         </div>
-                        <div class="relilab-termin-Thu">
-                            Donnerstag
+                        <div class="relilab-termin-Thu non-mobile">
+                            <span>
+                                Donnerstag
+                            </span>
                         </div>
-                        <div class="relilab-termin-Fri">
-                            Freitag
+                        <div class="relilab-termin-Fri non-mobile">
+                            <span>
+                                Freitag
+                            </span>
                         </div>
-                        <div class="relilab-termin-Sat">
-                            Samstag
+                        <div class="relilab-termin-Sat non-mobile">
+                            <span>
+                                Samstag
+                            </span>
                         </div>
-                        <div class="relilab-termin-Sun">
-                            Sonntag
+                        <div class="relilab-termin-Sun non-mobile">
+                            <span>
+                                Sonntag
+                            </span>
                         </div>
 
                     </div>

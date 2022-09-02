@@ -4,6 +4,7 @@
     padding: 5px;
     border-radius: 3px;
     margin-top: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
 }
 
 .relilab-termin-week-header {
@@ -64,6 +65,55 @@
     min-width: 50px;
     min-height: 50px;
 }
+.relilab-termin-week-header div[class^=relilab-termin-]:after{
+    display: none;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .relilab-termin-details{
+        left: 10%;
+        right: 10%;
+    }
+
+    .non-mobile span{
+        display: none;
+    }
+    .relilab-termin-week-header .relilab-termin-Mon:after{
+        display: unset !important;
+        content: 'Mo';
+    }
+
+    .relilab-termin-week-header .relilab-termin-Tue:after {
+        display: unset !important;
+        content: 'Di'
+    }
+
+    .relilab-termin-week-header .relilab-termin-Wen:after {
+        display: unset !important;
+        content: 'Mi';
+    }
+
+    .relilab-termin-week-header .relilab-termin-Thu:after {
+        display: unset !important;
+        content: 'Do';
+    }
+
+    .relilab-termin-week-header .relilab-termin-Fri:after {
+        display: unset !important;
+        content: 'Fr'
+    }
+
+    .relilab-termin-week-header .relilab-termin-Sat:after {
+        display: unset !important;
+        content: 'Sa'
+    }
+
+    .relilab-termin-week-header .relilab-termin-Sun:after {
+        display: unset !important;
+        content: 'So';
+    }
+}
 
 .relilab-termin-Mon {
     grid-area: Mon;
@@ -100,6 +150,8 @@
     border-radius: 3px;
     padding-bottom: 15px;
     cursor: default;
+    z-index: 100;
+    max-width: 500px;
 }
 
 .relilab-termin-details-header {
