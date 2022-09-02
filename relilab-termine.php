@@ -147,6 +147,10 @@ class RelilabTermine
 
                     </div>
 
+                    <?php
+                    // TODO: The relilab-termin-Mon etc. divs need to have the same width
+                    ?>
+
                     <div class="relilab-termin-week"> <?php
                     $newWeek = false;
                     $whileDate = strtotime('Monday');
