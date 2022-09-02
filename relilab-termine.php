@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
