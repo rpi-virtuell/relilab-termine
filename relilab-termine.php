@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -43,12 +43,14 @@ class RelilabTermine
     {
         $posts = self::getTerminePostQuery($atts);
 
-        if (!isset($_GET['startDate'])) {
-            $startDate = date('Y-m-d');
+        if (isset($_GET['startdate'])) {
+            $startDate = $_GET['startdate'];
+        } elseif (isset($atts['startdate'])) {
+            $startDate = $atts['startdate'];
         } else {
-            $startDate = $_GET['startDate'];
+            $startDate = date('Y-m-d');
         }
-        if (isset($_GET['listView']) && $_GET['listView'] === 'on') {
+        if (isset($_GET['listview']) && $_GET['listview'] === 'on' || isset($atts['listview']) && $atts['listview'] === 'on') {
             $listView = true;
         } else {
             $listView = false;
@@ -76,7 +78,7 @@ class RelilabTermine
                 </label>
                 <label for="dateSelector">
                     Startdatum
-                    <input type="date" name="startDate" id="dateSelector" value="<?php echo $startDate ?>">
+                    <input type="date" name="startdate" id="dateSelector" value="<?php echo $startDate ?>">
                 </label>
 
 
@@ -84,16 +86,16 @@ class RelilabTermine
                 Ansicht
                 <br>
                 <div class="relilab-view-slider-container">
-                    <div title="Kalender Ansicht">📆</div>
+                    <div title="Kalender Ansicht">📆 Kalender Ansicht</div>
                     <label for="viewSelector" class="relilab-slider-label">
-                        <input class="relilab-view-slider-input" name="listView" id="viewSelector"
+                        <input class="relilab-view-slider-input" name="listview" id="viewSelector"
                                type="checkbox" <?php echo $listView ? "checked" : "" ?>>
                         <span class="relilab-slider"></span>
                     </label>
-                    <div title="Listen Ansicht">📃</div>
+                    <div title="Listen Ansicht">📃 Listen Ansicht</div>
                 </div>
                 <br>
-                <input type="submit" value="Filter">
+                <input type="submit" value="Filter anwenden">
                 <br>
             </form>
 
@@ -293,6 +295,7 @@ class RelilabTermine
             <?php
 
         } else {
+            $currentMonth= '';
 
             foreach ($posts as $currentPost) {
 
@@ -301,9 +304,9 @@ class RelilabTermine
                 $post = $currentPost;
                 if ($startDate < date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
 
-                    $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true));
-                    if (RelilabTermine::has_month_changed($currentMonth)) {
 
+                    if ( $currentMonth != RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true))) {
+                        $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true));
                         ?>
                         <div class="relilab-list-month">
                             <h3> <?php echo $currentMonth . ' ' . date('Y', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) ?> </h3>
@@ -397,14 +400,6 @@ class RelilabTermine
             return $monat[date('M', strtotime($date))];
         else
             return '';
-    }
-
-    static function has_month_changed(string $currenPostMonth)
-    {
-        if (self::$lastPostMonth == $currenPostMonth)
-            return false;
-        else
-            return true;
     }
 
 }
