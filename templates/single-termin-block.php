@@ -1,38 +1,24 @@
-<?php
-
-// TODO: Deprecated Needs to be refactored or deleted WIP
-?>
-
-<div class="wp-block-columns relilab_termin_box has-background">
-    <div class="wp-block-column relilab_termin_button">
-        <div class="wp-block-group relilab_termin_day"
-             onclick="location.href='<?php echo !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
-            <div style="margin: 5px 5px">
-                <p class="has-text-align-center">zur Live Veranstaltung</p>
-                <p class="has-text-align-center"><?php echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate', true)); ?></p>
-                <p class="has-text-align-center"><?php echo date('j', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . '.'; ?></p>
-                <p class="has-text-align-center"><?php echo RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true)) . ' ' . date('Y', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))); ?></p>
-                <p class="has-text-align-center"><?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) ?></p>
+<div class="relilab-list-termin-box">
+    <div class="relilab-list-termin-header">
+        <?php echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate', true)) . ' ' .
+                date('j', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . '. ' .
+                RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true)); ?>
+        <br>
+        <?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) ?>
+    </div>
+    <div class="relilab-termin-content">
+        <div class="relilab-termin-thumbnail"
+             style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>')">
+            <div class="relilab-termin-post-details">
+                <h4 class="relilab-termin-title">
+                    <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                </h4>
+                <p class="relilab-termin-excerpt"><?php echo get_the_excerpt(); ?></p>
             </div>
         </div>
-    </div>
-
-    <div class="wp-block-column relilab_termin_content">
-        <h3 class="entry-title"><a class="has-text-align-center"
-                                   href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <p><?php echo get_the_excerpt(); ?>  </p>
-    </div>
-
-    <div class="wp-block-column relilab_termin_thumbnail">
-        <?php if (has_post_thumbnail()) : ?>
-
-            <div class="wp-block-image">
-                <figure>
-                    <?php the_post_thumbnail('medium'); ?>
-                </figure>
-            </div>
-        <?php endif ?>
-
-
+        <div class="relilab-meeting-button"
+             onclick="location.href='<?php echo !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
+            👉 Zur Live Veranstaltung 👈
+        </div>
     </div>
 </div>

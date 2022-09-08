@@ -1,10 +1,97 @@
+/*
+Form
+ */
+
+#subCategoryForm {
+    padding: 10px;
+    box-shadow: 0 4px 24px #0000000a;
+    margin-bottom: 15px;
+}
+
+#subCategoryForm input, select {
+    margin-top: 10px;
+}
+
+.relilab-tutorial-link {
+    margin-bottom: 15px !important;
+    text-align: center;
+}
+
+.relilab-view-slider-container {
+    display: flex;
+}
+
+.relilab-view-slider-container div {
+    margin: 0 10px;
+}
+
+.relilab-slider-label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+
+.relilab-view-slider-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.relilab-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.relilab-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.relilab-view-slider-input:checked + .relilab-slider {
+    background-color: #6713d2;
+}
+
+.relilab-view-slider-input:focus + .relilab-slider {
+    box-shadow: 0 0 1px #6713d2;
+}
+
+.relilab-view-slider-input:checked + .relilab-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.relilab-tutorial-link {
+    text-align: center;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/*Main View*/
 
 .relilab-termin-month {
-    background: lightgrey;
     padding: 5px;
     border-radius: 3px;
     margin-top: 15px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    box-shadow: 0 4px 24px #0000000a;
 }
 
 .relilab-termin-month h4 {
@@ -159,7 +246,7 @@
 .relilab-termin-details {
     display: none;
     position: absolute;
-    background: gray;
+    background: lightgrey;
     border-radius: 3px;
     padding-bottom: 15px;
     cursor: default;
@@ -173,7 +260,6 @@
 }
 
 .relilab-termin-thumbnail {
-    margin-top: 15px;
     background-size: contain;
     background-repeat: no-repeat;
     padding: 20px;
@@ -201,6 +287,8 @@
     border-radius: 22px;
     padding: 5px;
     margin-top: 10px;
+    color: white;
+    text-align: center;
 }
 
 .relilab-meeting-button:hover {
@@ -214,4 +302,58 @@
 
 .relilab-termin-focused {
 
+}
+
+
+/*
+List View Styles
+ */
+
+.relilab-list-month {
+    text-align: center;
+    padding: 20px;
+    background-color: lightgrey;
+}
+
+.relilab-list-termin-box {
+    box-shadow: 0 4px 24px #0000000a;
+    margin-bottom: 15px;
+}
+
+.relilab-list-termin-header {
+    width: 100%;
+    background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.relilab-list-termin-box .relilab-termin-content{
+    padding: 15px 0;
+}
+
+.relilab-list-termin-box .relilab-termin-post-details {
+    background: darkgrey;
+    margin: auto;
+    opacity: .9;
+    border-radius: 3px;
+    padding: 15px;
+}
+.relilab-list-termin-box .relilab-termin-title {
+    text-align: center;
+}
+.relilab-list-termin-box .relilab-termin-excerpt{
+
+}
+
+.relilab-list-termin-box .relilab-meeting-button {
+    padding: 15px;
+    width: fit-content;
+    margin: auto;
+}
+
+.relilab-list-termin-box .relilab-meeting-button .relilab-termin-day {
+    font-size: xx-large;
 }
