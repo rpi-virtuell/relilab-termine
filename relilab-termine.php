@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.1.2
+ * Version: 2.1.3
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -42,6 +42,7 @@ class RelilabTermine
     function termineAusgeben($atts)
     {
         $posts = self::getTerminePostQuery($atts);
+        $listView = false;
 
         if (isset($_GET['startdate'])) {
             $startDate = $_GET['startdate'];
@@ -50,11 +51,15 @@ class RelilabTermine
         } else {
             $startDate = date('Y-m-d');
         }
-        if (isset($_GET['listview']) && $_GET['listview'] === 'on' || isset($atts['listview']) && $atts['listview'] === 'on') {
+        if (isset($atts['listview']) && $atts['listview'] === 'on') {
             $listView = true;
-        } else {
+        }
+        if (isset($_GET['listview']) && $_GET['listview'] === 'on') {
+            $listView = true;
+        } elseif (isset($_GET['calendarview']) && $_GET['calendarview'] === 'on') {
             $listView = false;
         }
+
 
         ob_start();
         ?>
@@ -86,13 +91,23 @@ class RelilabTermine
                 Ansicht
                 <br>
                 <div class="relilab-view-slider-container">
-                    <div title="Kalender Ansicht">📆 Kalender Ansicht</div>
-                    <label for="viewSelector" class="relilab-slider-label">
-                        <input class="relilab-view-slider-input" name="listview" id="viewSelector"
-                               type="checkbox" <?php echo $listView ? "checked" : "" ?>>
-                        <span class="relilab-slider"></span>
-                    </label>
-                    <div title="Listen Ansicht">📃 Listen Ansicht</div>
+                    <?php if (isset($atts['listview']) && $atts['listview'] === 'on') { ?>
+                        <div title="Listen Ansicht">📃 Listen Ansicht</div>
+                        <label for="viewSelector" class="relilab-slider-label">
+                            <input class="relilab-view-slider-input" name="calendarview" id="viewSelector"
+                                   type="checkbox" <?php echo !$listView ? "checked" : "" ?>>
+                            <span class="relilab-slider"></span>
+                        </label>
+                        <div title="Kalender Ansicht">📆 Kalender Ansicht</div>
+                    <?php } else { ?>
+                        <div title="Kalender Ansicht">📆 Kalender Ansicht</div>
+                        <label for="viewSelector" class="relilab-slider-label">
+                            <input class="relilab-view-slider-input" name="listview" id="viewSelector"
+                                   type="checkbox" <?php echo $listView ? "checked" : "" ?>>
+                            <span class="relilab-slider"></span>
+                        </label>
+                        <div title="Listen Ansicht">📃 Listen Ansicht</div>
+                    <?php } ?>
                 </div>
                 <br>
                 <input type="submit" value="Filter anwenden">
