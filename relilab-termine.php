@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -295,17 +295,17 @@ class RelilabTermine
             <?php
 
         } else {
-            $currentMonth= '';
+            $currentMonth = '';
 
             foreach ($posts as $currentPost) {
 
                 global $post;
                 setup_postdata($currentPost);
                 $post = $currentPost;
-                if ($startDate < date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
+                if ($startDate <= date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
 
 
-                    if ( $currentMonth != RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true))) {
+                    if ($currentMonth != RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true))) {
                         $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true));
                         ?>
                         <div class="relilab-list-month">
