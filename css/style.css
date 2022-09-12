@@ -8,11 +8,11 @@ Form
     margin-bottom: 15px;
 }
 
-#subCategoryForm label,#subCategoryForm p{
+#subCategoryForm label, #subCategoryForm p {
     font-weight: bold;
 }
 
-#subCategoryForm input:not(.relilab-submit-button),#subCategoryForm select {
+#subCategoryForm input:not(.relilab-submit-button), #subCategoryForm select {
     margin-top: 10px;
     border: 1px solid #ddd;
     background-color: #f4f4f4;
@@ -22,79 +22,47 @@ Form
     margin-bottom: 15px !important;
     text-align: center;
 }
-.relilab-filter-container{
-display: flex;
+
+.relilab-filter-container {
+    display: flex;
 }
-.relilab-filter-container div{
+
+.relilab-filter-container div {
     width: 33%;
     margin: 0 5px;
 }
 
-.relilab-view-slider-container {
+.relilab-view-select-container {
     display: flex;
     align-items: center;
     margin: auto;
     width: fit-content;
 }
 
-.relilab-view-slider-container div {
+.relilab-view-select-container div {
     margin: 0 10px;
 }
 
-.relilab-slider-label {
+.relilab-select-label {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    cursor: pointer;
 }
 
 
-.relilab-view-slider-input {
+.relilab-view-select-input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.relilab-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 34px;
+.relilab-view-select-input:hover + .relilab-view-icon {
+    filter: brightness(.9) contrast(1.2);
 }
 
-.relilab-slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 50%;
+.relilab-view-select-input:checked + .relilab-view-icon {
+    background: #ff8103 !important;
 }
-
-.relilab-view-slider-input:checked + .relilab-slider {
-    background-color: #6713d2;
-}
-
-.relilab-view-slider-input:focus + .relilab-slider {
-    box-shadow: 0 0 1px #6713d2;
-}
-
-.relilab-view-slider-input:checked + .relilab-slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
 
 .relilab-view-icon {
     padding: 15px;
@@ -196,6 +164,22 @@ display: flex;
 }
 
 @media only screen and (max-width: 600px) {
+
+    .relilab-filter-container {
+        display: unset !important;
+    }
+
+    .relilab-view-select-container {
+        display: unset !important;
+    }
+
+    .relilab-view-select-container label {
+        margin: 15px 0 !important;
+    }
+
+    .relilab-submit-button {
+        margin-top: 20px !important;
+    }
 
     .relilab-termin-details {
         left: 10%;
