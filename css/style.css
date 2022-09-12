@@ -8,17 +8,33 @@ Form
     margin-bottom: 15px;
 }
 
-#subCategoryForm input, select {
+#subCategoryForm label,#subCategoryForm p{
+    font-weight: bold;
+}
+
+#subCategoryForm input:not(.relilab-submit-button),#subCategoryForm select {
     margin-top: 10px;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
 }
 
 .relilab-tutorial-link {
     margin-bottom: 15px !important;
     text-align: center;
 }
+.relilab-filter-container{
+display: flex;
+}
+.relilab-filter-container div{
+    width: 33%;
+    margin: 0 5px;
+}
 
 .relilab-view-slider-container {
     display: flex;
+    align-items: center;
+    margin: auto;
+    width: fit-content;
 }
 
 .relilab-view-slider-container div {
@@ -79,6 +95,17 @@ Form
     transform: translateX(26px);
 }
 
+
+.relilab-view-icon {
+    padding: 15px;
+    background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
+    box-shadow: 0 4px 24px #0000000a;
+    margin: 0 5px;
+    border-radius: 22px;
+    color: white;
+    font-weight: bold;;
+}
+
 .relilab-tutorial-link {
     text-align: center;
     margin-top: 15px;
@@ -133,7 +160,7 @@ Form
     font-weight: bold;
 }
 
-.relilab-termin-filled:hover, .relilab-termin-filled:hover :not(div, a, img) {
+.relilab-termin-filled:hover, .relilab-termin-filled:hover relilab-termin-filled:not(div, a, img) {
     background: #6713d2 !important;
     cursor: pointer;
 }
@@ -330,7 +357,7 @@ List View Styles
     padding: 15px 0;
 }
 
-.relilab-list-termin-box .relilab-termin-content{
+.relilab-list-termin-box .relilab-termin-content {
     padding: 15px 0;
 }
 
@@ -341,10 +368,12 @@ List View Styles
     border-radius: 3px;
     padding: 15px;
 }
+
 .relilab-list-termin-box .relilab-termin-title {
     text-align: center;
 }
-.relilab-list-termin-box .relilab-termin-excerpt{
+
+.relilab-list-termin-box .relilab-termin-excerpt {
 
 }
 
