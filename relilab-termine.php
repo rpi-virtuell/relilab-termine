@@ -5,12 +5,13 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.2.1
+ * Version: 2.2.2
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
 class RelilabTermine
 {
+    private string $version = '2.2.2';
 
     private static string $lastPostMonth = '';
 
@@ -20,6 +21,12 @@ class RelilabTermine
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('init', array('RelilabTermineICS', 'ical'));
         add_filter('the_content', array($this, 'pushTermineToContent'));
+    }
+
+    function enqueue_scripts()
+    {
+        wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css',[],$this->version);
+        wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), false, true);
     }
 
     function pushTermineToContent($content)
@@ -355,12 +362,6 @@ class RelilabTermine
         }
 
         return ob_get_clean();
-    }
-
-    function enqueue_scripts()
-    {
-        wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css');
-        wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), false, true);
     }
 
     /**
