@@ -271,7 +271,7 @@ Form
 }
 
 .relilab-termin-thumbnail {
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     padding: 20px;
     background-position: center;
@@ -346,9 +346,8 @@ List View Styles
 }
 
 .relilab-list-termin-box .relilab-termin-post-details {
-    background: darkgrey;
+    background: rgba(255,255,255,0.7);
     margin: auto;
-    opacity: .9;
     border-radius: 3px;
     padding: 15px;
 }

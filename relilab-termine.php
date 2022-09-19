@@ -5,13 +5,13 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
 class RelilabTermine
 {
-    private string $version = '2.2.2';
+    private string $version = '2.2.3';
 
     private static string $lastPostMonth = '';
 
