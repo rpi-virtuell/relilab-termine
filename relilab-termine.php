@@ -5,13 +5,13 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.2.3
+ * Version: 2.3.0
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
 class RelilabTermine
 {
-    private string $version = '2.2.3';
+    private string $version = '2.3.0';
 
     private static string $lastPostMonth = '';
 
@@ -25,7 +25,7 @@ class RelilabTermine
 
     function enqueue_scripts()
     {
-        wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css',[],$this->version);
+        wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css', [], $this->version);
         wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), false, true);
     }
 
@@ -40,7 +40,8 @@ class RelilabTermine
             } else {
                 $zoom_link = get_option("options_relilab_zoom_link");
             }
-            $content = "<p>" . get_post_meta($id, "relilab_startdate", true) . " - " . get_post_meta($id, "relilab_enddate", true) . " <a href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
+
+            $content = "<p>" . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_startdate", true))) . " - " . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_enddate", true))) . "      <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
         }
         return $content;
     }
@@ -169,12 +170,14 @@ class RelilabTermine
 
                         ?>
                         <div class="relilab-termin-month">
-                        <h4>
-                            <?php
-                            $newMonth = false;
-                            echo RelilabTermine::getMonat($date->format(DATE_ATOM)) . ' - ' . $date->format('Y');
-                            ?>
-                        </h4>
+                        <div class="relilab-list-month">
+                            <h4>
+                                <?php
+                                $newMonth = false;
+                                echo RelilabTermine::getMonat($date->format(DATE_ATOM)) . ' - ' . $date->format('Y');
+                                ?>
+                            </h4>
+                        </div>
                         <div class="relilab-termin-month">
                         <div class="relilab-termin-week-header">
                             <div class="relilab-termin-Mon non-mobile">
@@ -214,11 +217,6 @@ class RelilabTermine
                             </div>
 
                         </div>
-
-                        <?php
-                        // TODO: The relilab-termin-Mon etc. divs need to have the same width
-                        ?>
-
                         <div class="relilab-termin-week"> <?php
                         $newWeek = false;
                         $whileDate = strtotime('Monday');
@@ -258,33 +256,55 @@ class RelilabTermine
                                     $timestamp = $date->format(DATE_ATOM);
                                     echo RelilabTermine::getWochentag($timestamp) . ' ' . $date->format('j') . '. ' . RelilabTermine::getMonat($timestamp);
                                     ?>
+                                    <?php
+                                    $first = true;
+                                    foreach ($postIds
+
+                                    as $postId => $termin) {
+                                    $terminPost = get_post($postId);
+                                    if ($first) {
+                                        echo '<br>';
+                                    echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true)))
+                                    ?> </div> <?php
+                                $first = false;
+                                   }
+                                   else {
+                                       ?>
+                                       <div class="relilab-termin-details-header">
+                                           <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
+                                       </div>
+                                       <?php
+                                   }
+                                    ?>
+
+
+                                <div class="relilab-termin-thumbnail"
+                                     style="background-image: url('<?php echo get_the_post_thumbnail_url($postId) ?>')">
+                                    <div class="relilab-termin-post-details">
+
+                                        <h5>
+                                            <a class="relilab-termin-title"
+                                               href="<?php echo get_post_permalink($postId) ?>">
+                                                <?php echo $terminPost->post_title; ?>
+                                            </a>
+                                        </h5>
+                                        <p>
+                                            <?php echo $terminPost->post_excerpt; ?>
+                                        </p>
+                                        <?php if (time() >= strtotime(get_post_meta($postId, 'relilab_startdate', true)) && time() <= strtotime(get_post_meta($postId, 'relilab_enddate', true))) { ?>
+                                            <div class="wp-block-group relilab-meeting-button"
+                                                 onclick="location.href='<?php echo !empty(get_post_meta($postId, "relilab_custom_zoom_link", true)) ? get_post_meta($postId, "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
+                                                🔴 Zur Live Veranstaltung 🔴
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="wp-block-group relilab-meeting-button"
+                                                 onclick="location.href='<?php echo get_post_permalink($postId) ?>'">
+                                                👉 Mehr zur Veranstaltung 👈
+                                            </div>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                                 <?php
-                                foreach ($postIds
-
-                                         as $postId => $termin) {
-                                    $terminPost = get_post($postId);
-                                    ?>
-                                    <div class="relilab-termin-thumbnail"
-                                         style="background-image: url('<?php echo get_the_post_thumbnail_url($postId) ?>')">
-                                        <div class="relilab-termin-daytime">
-                                            <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
-                                            <br>
-                                            <h5>
-                                                <a class="relilab-termin-title"
-                                                   href="<?php echo get_post_permalink($postId) ?>">
-                                                    <?php
-                                                    echo $terminPost->post_title ?>
-                                                </a>
-                                            </h5>
-                                        </div>
-
-                                        <div class="wp-block-group relilab-meeting-button"
-                                             onclick="location.href='<?php echo !empty(get_post_meta($postId, "relilab_custom_zoom_link", true)) ? get_post_meta($postId, "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
-                                            👉 Zur Live Veranstaltung 👈
-                                        </div>
-                                    </div>
-                                    <?php
                                 }
                                 ?>
                             </div>
@@ -335,7 +355,8 @@ class RelilabTermine
         } else {
             $currentMonth = '';
             $numberOfPosts = 0;
-            foreach ($posts as $currentPost) {
+            $sameDay = false;
+            foreach ($posts as $key => $currentPost) {
 
                 global $post;
                 setup_postdata($currentPost);
@@ -351,10 +372,51 @@ class RelilabTermine
                         </div>
                         <?php
                     }
-                    if ($template = locate_template('relilab-Termine')) {
-                        load_template($template);
+
+                    if (!$sameDay) {
+                        ?>
+                        <div class="relilab-list-termin-box">
+                        <?php
+                    }
+                    ?>
+                    <div class="relilab-termin-details-header">
+                        <?php if (!$sameDay) {
+                            echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate', true)) . ' ' .
+                                date('j', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . '. ' .
+                                RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true)); ?>
+                            <br>
+                        <?php } ?>
+                        <?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) ?>
+                    </div>
+                    <div class="relilab-termin-content">
+                        <div class="relilab-termin-thumbnail"
+                             style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>')">
+                            <div class="relilab-termin-post-details">
+                                <h4 class="relilab-termin-title">
+                                    <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                </h4>
+                                <p class="relilab-termin-excerpt"><?php echo get_the_excerpt(); ?></p>
+                                <?php if (time() >= strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)) && time() <= strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) { ?>
+                                    <div class="wp-block-group relilab-meeting-button"
+                                         onclick="location.href='<?php echo !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
+                                        🔴 Zur Live Veranstaltung 🔴
+                                    </div>
+                                <?php } else { ?>
+                                    <div class="wp-block-group relilab-meeting-button"
+                                         onclick="location.href='<?php the_permalink(); ?>'">
+                                        👉 Mehr zur Veranstaltung 👈
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    if (isset($posts[$key + 1]) && date('Y-m-d', strtotime(get_post_meta($posts[$key + 1]->ID, 'relilab_startdate', true)))
+                        != date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
+                        ?> </div> <?php
+                        $sameDay = false;
                     } else {
-                        load_template(dirname(__FILE__) . '/templates/single-termin-block.php', false);
+                        $sameDay = true;
                     }
                 }
             }
