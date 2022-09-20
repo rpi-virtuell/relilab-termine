@@ -5,15 +5,13 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.3.0
+ * Version: 2.3.1
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
 class RelilabTermine
 {
-    private string $version = '2.3.0';
-
-    private static string $lastPostMonth = '';
+    private string $version = '2.3.1';
 
     public function __construct()
     {
@@ -41,7 +39,7 @@ class RelilabTermine
                 $zoom_link = get_option("options_relilab_zoom_link");
             }
 
-            $content = "<p>" . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_startdate", true))) . " - " . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_enddate", true))) . "      <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
+            $content = "<p>" . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_startdate", true))) . " - " . date('H:i', strtotime(get_post_meta($id, "relilab_enddate", true))) . "      <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
         }
         return $content;
     }
