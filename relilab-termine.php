@@ -5,7 +5,7 @@ include_once 'relilab-termine-ics.php';
  * Plugin Name: relilab Termine
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
  * Description: Erstellt Termine aus posts
- * Version: 2.3.1
+ * Version: 2.4.0
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -49,6 +49,17 @@ class RelilabTermine
     {
         $listView = false;
 
+        $only_one_month = false;
+        $widgetview = false;
+
+        if (isset($atts['only_one_month']) && $atts['only_one_month'] === 'on') {
+            $only_one_month = true;
+        }
+
+        if (isset($atts['widgetview']) && $atts['widgetview'] === 'on') {
+            $widgetview = true;
+        }
+
         if (isset($_GET['startdate'])) {
             $startDate = $_GET['startdate'];
         } elseif (isset($atts['startdate'])) {
@@ -78,69 +89,72 @@ class RelilabTermine
         $posts = self::getTerminePostQuery($atts);
 
         ob_start();
-        ?>
-        <div class="wp-block-column relilab_termin_header">
-            <form id="subCategoryForm" name="subForm" method="get">
-                <div class="relilab-filter-container">
-                    <div>
-                        <label for="categorySelector">
-                            Kategorie
-                        </label>
-                        <select class="select" name="category" id="categorySelector">
-                            <?php
-                            $termineSubCategories = get_categories(
-                                array('parent' => get_category_by_slug('termine')->term_id));
-                            echo '<option value="termine"> Termine </option>';
-                            foreach ($termineSubCategories as $subCategory) {
-                                echo '<option value="' . $subCategory->slug . '"'
-                                    . ($posts['category_name'] == $subCategory->slug ? 'selected' : '') . '>'
-                                    . $subCategory->name . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="dateSelector">
-                            Startdatum
-                        </label>
-                        <input type="date" name="startdate" id="dateSelector" value="<?php echo $startDate ?>">
-                    </div>
-                    <?php if ($listView) {
-                        ?>
+        if (!$widgetview) {
+            ?>
+            <div class="wp-block-column relilab_termin_header">
+                <form id="subCategoryForm" name="subForm" method="get">
+                    <div class="relilab-filter-container">
                         <div>
-                            <label for="post-restriction">
-                                Anzahl der Termine
+                            <label for="categorySelector">
+                                Kategorie
                             </label>
-                            <input type="number" name="post-restriction" id="post-restriction"
-                                   value="<?php echo $postRestriction == -1 ? '' : $postRestriction; ?>">
+                            <select class="select" name="category" id="categorySelector">
+                                <?php
+                                $termineSubCategories = get_categories(
+                                    array('parent' => get_category_by_slug('termine')->term_id));
+                                echo '<option value="termine"> Termine </option>';
+                                foreach ($termineSubCategories as $subCategory) {
+                                    echo '<option value="' . $subCategory->slug . '"'
+                                        . ($posts['category_name'] == $subCategory->slug ? 'selected' : '') . '>'
+                                        . $subCategory->name . '</option>';
+                                }
+                                ?>
+                            </select>
                         </div>
-                    <?php } ?>
-                </div>
-                <p>
-                    Ansicht
-                </p>
-                <div class="relilab-view-select-container">
-                    <label for="listView" class="relilab-select-label">
-                        <input class="relilab-view-select-input" name="listview" id="listView"
-                               type="radio" value="on" <?php echo $listView ? "checked" : "" ?>>
-                        <span title="Listen Ansicht" class="relilab-view-icon">📃 Listen Ansicht</span>
-                    </label>
-                    <label for="calendarView" class="relilab-select-label">
-                        <input class="relilab-view-select-input" name="listview" id="calendarView"
-                               type="radio" value="off" <?php echo !$listView ? "checked" : "" ?>>
-                        <span title="Kalender Ansicht" class="relilab-view-icon">📆 Kalender Ansicht</span>
-                    </label>
-                </div>
-                <br>
-                <input class="relilab-submit-button" type="submit" value="Filter anwenden">
-                <br>
-            </form>
+                        <div>
+                            <label for="dateSelector">
+                                Startdatum
+                            </label>
+                            <input type="date" name="startdate" id="dateSelector" value="<?php echo $startDate ?>">
+                        </div>
+                        <?php if ($listView) {
+                            ?>
+                            <div>
+                                <label for="post-restriction">
+                                    Anzahl der Termine
+                                </label>
+                                <input type="number" name="post-restriction" id="post-restriction"
+                                       value="<?php echo $postRestriction == -1 ? '' : $postRestriction; ?>">
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <p>
+                        Ansicht
+                    </p>
+                    <div class="relilab-view-select-container">
+                        <label for="listView" class="relilab-select-label">
+                            <input class="relilab-view-select-input" name="listview" id="listView"
+                                   type="radio" value="on" <?php echo $listView ? "checked" : "" ?>>
+                            <span title="Listen Ansicht" class="relilab-view-icon">📃 Listen Ansicht</span>
+                        </label>
+                        <label for="calendarView" class="relilab-select-label">
+                            <input class="relilab-view-select-input" name="listview" id="calendarView"
+                                   type="radio" value="off" <?php echo !$listView ? "checked" : "" ?>>
+                            <span title="Kalender Ansicht" class="relilab-view-icon">📆 Kalender Ansicht</span>
+                        </label>
+                    </div>
+                    <br>
+                    <input class="relilab-submit-button" type="submit" value="Filter anwenden">
+                    <br>
+                </form>
 
-            <a class="relilab-tutorial-link button"
-               href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
-                📆 <?php echo 'Kalender einbinden' ?></a>
-        </div>
-        <?php
+                <a class="relilab-tutorial-link button"
+                   href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
+                    📆 <?php echo 'Kalender einbinden' ?></a>
+            </div>
+            <?php
+
+        }
 
         $posts = get_posts($posts);
 
@@ -261,19 +275,19 @@ class RelilabTermine
                                     as $postId => $termin) {
                                     $terminPost = get_post($postId);
                                     if ($first) {
-                                        echo '<br>';
+                                    echo '<br>';
                                     echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true)))
                                     ?> </div> <?php
                                 $first = false;
-                                   }
-                                   else {
-                                       ?>
-                                       <div class="relilab-termin-details-header">
-                                           <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
-                                       </div>
-                                       <?php
-                                   }
+                                }
+                                else {
                                     ?>
+                                    <div class="relilab-termin-details-header">
+                                        <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
 
 
                                 <div class="relilab-termin-thumbnail"
@@ -343,9 +357,14 @@ class RelilabTermine
                         ?> </div> <?php
                         $newMonth = true;
                         $newWeek = true;
+                        if ($only_one_month) {
+                            break;
+                        }
                     }
 
+
                 }
+
                 ?>
             </div>
             <?php
@@ -453,24 +472,6 @@ class RelilabTermine
      * @param string $date
      * @return string
      */
-    static function getWochentag(string $date): string
-    {
-        $wochentag = array(
-            'Mon' => 'Montag',
-            'Tue' => 'Dienstag',
-            'Wed' => 'Mittwoch',
-            'Thu' => 'Donnerstag',
-            'Fri' => 'Freitag',
-            'Sat' => 'Samstag',
-            'Sun' => 'Sonntag',
-        );
-        return $wochentag[date('D', strtotime($date))];
-    }
-
-    /**
-     * @param string $date
-     * @return string
-     */
     static function getMonat(string $date): string
     {
         $monat = array(
@@ -491,6 +492,24 @@ class RelilabTermine
             return $monat[date('M', strtotime($date))];
         else
             return '';
+    }
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    static function getWochentag(string $date): string
+    {
+        $wochentag = array(
+            'Mon' => 'Montag',
+            'Tue' => 'Dienstag',
+            'Wed' => 'Mittwoch',
+            'Thu' => 'Donnerstag',
+            'Fri' => 'Freitag',
+            'Sat' => 'Samstag',
+            'Sun' => 'Sonntag',
+        );
+        return $wochentag[date('D', strtotime($date))];
     }
 
 }
