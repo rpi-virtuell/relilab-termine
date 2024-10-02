@@ -11,7 +11,7 @@ include_once 'relilab-termine-ics.php';
  */
 class RelilabTermine
 {
-    private string $version = '2.3.1';
+    private string $version = '2.4.0';
 
     public function __construct()
     {
@@ -38,8 +38,13 @@ class RelilabTermine
             } else {
                 $zoom_link = get_option("options_relilab_zoom_link");
             }
+            $startdate = get_post_meta($id, "relilab_startdate", true);
+            $enddate = get_post_meta($id, "relilab_enddate", true);
 
-            $content = "<p>" . date('d.m.Y H:i', strtotime(get_post_meta($id, "relilab_startdate", true))) . " - " . date('H:i', strtotime(get_post_meta($id, "relilab_enddate", true))) . "      <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
+            if (is_single() && !empty($startdate) && !empty($enddate)) {
+                $content = "<p> Datum : <b>" . date('d.m.Y H:i', strtotime($startdate)) . " - " . date('H:i', strtotime($enddate)) . " </b>   <br>   <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
+
+            }
         }
         return $content;
     }
