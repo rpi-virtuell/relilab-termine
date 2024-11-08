@@ -16,8 +16,8 @@ class RelilabTermineICS
             $events = [];
 
             foreach ($posts as $post) {
-                $startdate = get_post_meta($post->ID, 'relilab_startdate', true);
-                $enddate = get_post_meta($post->ID, 'relilab_enddate', true);
+                $startdate = get_post_meta($post->ID, EventCalendarAdmin::get_termin_start_date_field(), true);
+                $enddate = get_post_meta($post->ID, EventCalendarAdmin::get_termin_end_date_field(), true);
 
 
                 $event = (new Eluceo\iCal\Domain\Entity\Event())

@@ -1,11 +1,12 @@
 <?php
 include_once 'relilab-termine-ics.php';
+include_once("admin/event-calendar-admin.php");
 
 /**
- * Plugin Name: relilab Termine
+ * Plugin Name: Event Termin Kalender
  * Plugin URI: https://github.com/rpi-virtuell/relilab-termine
- * Description: Erstellt Termine aus posts
- * Version: 2.4.0
+ * Description: Zeige Posts mit Datumsfeldern als Kalender oder Eventtimeline ab
+ * Version: 3.0.0
  * Author: Daniel Reintanz
  * Licence: GPLv3
  */
@@ -15,10 +16,12 @@ class RelilabTermine
 
     public function __construct()
     {
+        new EventCalendarAdmin();
+
         add_shortcode('relilab_termine', array($this, 'termineAusgeben'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('init', array('RelilabTermineICS', 'ical'));
-        add_filter('the_content', array($this, 'pushTermineToContent'));
+//        add_filter('the_content', array($this, 'pushTermineToContent'));
     }
 
     function enqueue_scripts()
@@ -36,10 +39,10 @@ class RelilabTermine
             if (!empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true))) {
                 $zoom_link = get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true);
             } else {
-                $zoom_link = get_option("options_relilab_zoom_link");
+                $zoom_link = get_option("options_relilab_zoom_link", "");
             }
-            $startdate = get_post_meta($id, "relilab_startdate", true);
-            $enddate = get_post_meta($id, "relilab_enddate", true);
+            $startdate = get_post_meta($id, EventCalendarAdmin::get_termin_start_date_field(), true);
+            $enddate = get_post_meta($id, EventCalendarAdmin::get_termin_end_date_field(), true);
 
             if (is_single() && !empty($startdate) && !empty($enddate)) {
                 $content = "<p> Datum : <b>" . date('d.m.Y H:i', strtotime($startdate)) . " - " . date('H:i', strtotime($enddate)) . " </b>   <br>   <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
@@ -94,6 +97,7 @@ class RelilabTermine
         $posts = self::getTerminePostQuery($atts);
 
         ob_start();
+
         if (!$widgetview) {
             ?>
             <div class="wp-block-column relilab_termin_header">
@@ -154,7 +158,7 @@ class RelilabTermine
                 </form>
 
                 <a class="relilab-tutorial-link button"
-                   href="<?php echo get_option('options_relilab_kalendertutorial_url'); ?>">
+                   href="<?php echo get_option('options_relilab_kalendertutorial_url', ''); ?>">
                     📆 <?php echo 'Kalender einbinden' ?></a>
             </div>
             <?php
@@ -170,11 +174,12 @@ class RelilabTermine
                 <?php
 
                 $lastPost = end($posts);
+                var_dump(get_post_meta($lastPost->ID, EventCalendarAdmin::get_termin_end_date_field(), true));
 
                 $datesTillLastPost = new DatePeriod(
                     new DateTime(date("Y-m-d", strtotime($startDate))),
                     new DateInterval('P1D'),
-                    new DateTime(get_post_meta($lastPost->ID, 'relilab_startdate', true))
+                    new DateTime(get_post_meta($lastPost->ID, EventCalendarAdmin::get_termin_end_date_field(), true))
                 );
                 $newWeek = true;
                 $newMonth = true;
@@ -251,14 +256,16 @@ class RelilabTermine
                 }
                     //Search for post with $data as relilab_startdate
 
-                    $postIds = array_column($posts, 'relilab_startdate', 'ID');
+                    $postIds = array_column($posts, EventCalendarAdmin::get_termin_start_date_field(), 'ID');
+
+
 
                     foreach ($postIds as $key => $value) {
+
                         if (date("Y-m-d", strtotime($value)) != $date->format("Y-m-d"))
                             unset($postIds[$key]);
                     }
                     if (!empty($postIds)) {
-
 
                         ?>
                         <div class="relilab-termin-box relilab-termin-filled relilab-termin-<?php echo $date->format('D'); ?>">
@@ -281,14 +288,15 @@ class RelilabTermine
                                     $terminPost = get_post($postId);
                                     if ($first) {
                                     echo '<br>';
-                                    echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true)))
-                                    ?> </div> <?php
+                                    echo date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_start_date_field(), true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_end_date_field(), true)))
+                                    ?>
+                                </div> <?php
                                 $first = false;
                                 }
                                 else {
                                     ?>
                                     <div class="relilab-termin-details-header">
-                                        <?php echo date('H:i', strtotime(get_post_meta($postId, 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, 'relilab_enddate', true))) ?>
+                                        <?php echo date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_start_date_field(), true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_end_date_field(), true))) ?>
                                     </div>
                                     <?php
                                 }
@@ -308,7 +316,7 @@ class RelilabTermine
                                         <p>
                                             <?php echo $terminPost->post_excerpt; ?>
                                         </p>
-                                        <?php if (time() >= strtotime(get_post_meta($postId, 'relilab_startdate', true)) && time() <= strtotime(get_post_meta($postId, 'relilab_enddate', true))) { ?>
+                                        <?php if (time() >= strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_start_date_field(), true)) && time() <= strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_end_date_field(), true))) { ?>
                                             <div class="wp-block-group relilab-meeting-button"
                                                  onclick="location.href='<?php echo !empty(get_post_meta($postId, "relilab_custom_zoom_link", true)) ? get_post_meta($postId, "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
                                                 🔴 Zur Live Veranstaltung 🔴
@@ -383,14 +391,14 @@ class RelilabTermine
                 global $post;
                 setup_postdata($currentPost);
                 $post = $currentPost;
-                if (($postRestriction == -1 || $numberOfPosts < $postRestriction) && $startDate <= date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
+                if (($postRestriction == -1 || $numberOfPosts < $postRestriction) && $startDate <= date('Y-m-d', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)))) {
                     $numberOfPosts++;
 
-                    if ($currentMonth != RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true))) {
-                        $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true));
+                    if ($currentMonth != RelilabTermine::getMonat(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) {
+                        $currentMonth = RelilabTermine::getMonat(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true));
                         ?>
                         <div class="relilab-list-month">
-                            <h3> <?php echo $currentMonth . ' ' . date('Y', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) ?> </h3>
+                            <h3> <?php echo $currentMonth . ' ' . date('Y', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) ?> </h3>
                         </div>
                         <?php
                     }
@@ -403,12 +411,12 @@ class RelilabTermine
                     ?>
                     <div class="relilab-termin-details-header">
                         <?php if (!$sameDay) {
-                            echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), 'relilab_startdate', true)) . ' ' .
-                                date('j', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . '. ' .
-                                RelilabTermine::getMonat(get_post_meta(get_the_ID(), 'relilab_startdate', true)); ?>
+                            echo RelilabTermine::getWochentag(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)) . ' ' .
+                                date('j', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) . '. ' .
+                                RelilabTermine::getMonat(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)); ?>
                             <br>
                         <?php } ?>
-                        <?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) ?>
+                        <?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_end_date_field(), true))) ?>
                     </div>
                     <div class="relilab-termin-content">
                         <div class="relilab-termin-thumbnail"
@@ -418,7 +426,7 @@ class RelilabTermine
                                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h4>
                                 <p class="relilab-termin-excerpt"><?php echo get_the_excerpt(); ?></p>
-                                <?php if (time() >= strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)) && time() <= strtotime(get_post_meta(get_the_ID(), 'relilab_enddate', true))) { ?>
+                                <?php if (time() >= strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)) && time() <= strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_end_date_field(), true))) { ?>
                                     <div class="wp-block-group relilab-meeting-button"
                                          onclick="location.href='<?php echo !empty(get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true)) ? get_post_meta(get_the_ID(), "relilab_custom_zoom_link", true) : get_option('options_relilab_zoom_link') ?>'">
                                         🔴 Zur Live Veranstaltung 🔴
@@ -433,8 +441,8 @@ class RelilabTermine
                         </div>
                     </div>
                     <?php
-                    if (isset($posts[$key + 1]) && date('Y-m-d', strtotime(get_post_meta($posts[$key + 1]->ID, 'relilab_startdate', true)))
-                        != date('Y-m-d', strtotime(get_post_meta(get_the_ID(), 'relilab_startdate', true)))) {
+                    if (isset($posts[$key + 1]) && date('Y-m-d', strtotime(get_post_meta($posts[$key + 1]->ID, EventCalendarAdmin::get_termin_start_date_field(), true)))
+                        != date('Y-m-d', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)))) {
                         ?> </div> <?php
                         $sameDay = false;
                     } else {
@@ -454,11 +462,12 @@ class RelilabTermine
     static public function getTerminePostQuery($atts): array
     {
 
+//        var_dump(EventCalendarAdmin::get_termin_selected_post_type());
+//        var_dump(EventCalendarAdmin::get_termin_start_date_field());
         $posts = array(
-            'post_type' => 'post',
+            'post_type' => EventCalendarAdmin::get_termin_selected_post_type(),
             'posts_per_page' => -1,
-            'category_name' => 'termine',
-            'meta_key' => 'relilab_startdate',
+            'meta_key' => EventCalendarAdmin::get_termin_start_date_field(),
             'meta_value' => false,
             'meta_compare' => '!=',
             'orderby' => 'meta_value',
