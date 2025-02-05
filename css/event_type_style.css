@@ -1,0 +1,34 @@
+.event-termin-filled.relimentar-termin{
+    background-color: #36af78 !important;
+}
+
+.event-termin-filled.relimentar-termin .event-termin-details-header {
+    background-image: linear-gradient(to top, #36af78 0%, #6713d2 100%) !important;
+
+}
+
+.event-termin-details-header.relimentar-termin {
+    background-color: #36af78;
+
+}
+.event-termin-details-header.default-termin {
+    background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
+
+}
+.default-termin.relimentar-termin .event-termin-details-header {
+    background-image: linear-gradient(to top, #36af78 0%, #6713d2 100%);
+
+}
+
+.relimentar-termin .event-meeting-button {
+    background-color: #e830b5;
+}
+.default-termin  .event-meeting-button{
+    background: linear-gradient(90deg, #d225f8, #ff8103) !important;
+
+}
+.default-termin.relimentar-termin .event-meeting-button {
+    background: linear-gradient(90deg, #36af78, #ff8103) !important;
+;
+
+}

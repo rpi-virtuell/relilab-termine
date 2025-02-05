@@ -12,23 +12,32 @@ include_once("admin/event-calendar-admin.php");
  */
 class Event_Termin_Calendar
 {
-    private string $version = '2.4.0';
+    private string $version = '3.0.1';
+
+    private array $available_color_classes = [
+        'relimentar',
+        'relilab'
+    ];
 
     public function __construct()
     {
         new EventCalendarAdmin();
 
         add_shortcode('event_calendar', array($this, 'display_termin_calendar'));
+        add_shortcode('relilab_termine', array($this, 'display_termin_calendar'));
+
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('init', array('RelilabTermineICS', 'ical'));
         //TODO currently the ical logic is going to remain as it is
 //        add_filter('the_content', array($this, 'pushTermineToContent'));
     }
 
+
     function enqueue_scripts()
     {
         wp_enqueue_style('single-termin-block-style', plugin_dir_url(__FILE__) . 'css/style.css', [], $this->version);
-        wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), false, true);
+        wp_enqueue_style('event-type-style', plugin_dir_url(__FILE__) . 'css/event_type_style.css', [], $this->version);
+        wp_enqueue_script('termin-block-script', plugin_dir_url(__FILE__) . 'js/termin-script.js', array('jquery'), $this->version, true);
     }
 
     /**
@@ -121,6 +130,7 @@ class Event_Termin_Calendar
         $posts = self::get_event_post_query($atts);
 
         ob_start();
+//        var_dump(get_theme_mod('colorPalette'));
 
         if (!$widgetview) {
             ?>
@@ -288,9 +298,19 @@ class Event_Termin_Calendar
                             unset($postIds[$key]);
                     }
                     if (!empty($postIds)) {
-
+                        foreach ($postIds as $postId => $post_date) {
+                            $terms = wp_get_post_terms($postId, 'category', array('fields' => 'slugs'));
+                            $term_classes = '';
+                            foreach ($terms as $term) {
+                                $term_classes = $term . '-termin ';
+                            }
+                            if (empty($term_classes)) {
+                                $term_classes = 'default-termin';
+                            }
+                            //TODO maybe implement check if class is avaialable in event_type_style css
+                        }
                         ?>
-                        <div class="event-termin-box event-termin-filled event-termin-<?php echo $date->format('D'); ?>">
+                        <div class="event-termin-box event-termin-filled <?php echo $term_classes ?> event-termin-<?php echo $date->format('D'); ?>">
                             <div class="event-termin-date">
                                 <div class="event-termin-day">
                                     <?php echo $date->format('j') . '. '; ?>
@@ -300,7 +320,7 @@ class Event_Termin_Calendar
                                 <div class="event-termin-details-header">
                                     <?php
                                     $timestamp = $date->format(DATE_ATOM);
-                                    echo Event_Termin_Calendar::get_wochentag($timestamp) . ' ' . $date->format('j') . '. ' . eventTermine::getMonat($timestamp);
+                                    echo Event_Termin_Calendar::get_wochentag($timestamp) . ' ' . $date->format('j') . '. ' . Event_Termin_Calendar::get_monat($timestamp);
                                     ?>
                                     <?php
                                     $first = true;
@@ -317,7 +337,7 @@ class Event_Termin_Calendar
                                 }
                                 else {
                                     ?>
-                                    <div class="event-termin-details-header">
+                                    <div class="event-termin-details-header ">
                                         <?php echo date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_start_date_field(), true))) . ' - ' . date('H:i', strtotime(get_post_meta($postId, EventCalendarAdmin::get_termin_end_date_field(), true))) ?>
                                     </div>
                                     <?php
@@ -484,8 +504,7 @@ class Event_Termin_Calendar
     static public function get_event_post_query($atts): array
     {
 
-//        var_dump(EventCalendarAdmin::get_termin_selected_post_type());
-//        var_dump(EventCalendarAdmin::get_termin_start_date_field());
+
         $posts = array(
             'post_type' => EventCalendarAdmin::get_termin_selected_post_type(),
             'posts_per_page' => -1,

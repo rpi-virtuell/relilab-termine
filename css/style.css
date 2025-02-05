@@ -126,7 +126,7 @@ Form
     color: white;
 }
 .event-termin-filled{
-    background: linear-gradient(90deg, #d225f8, #ff8103) !important;
+    /*background: linear-gradient(90deg, #d225f8, #ff8103) !important;*/
 }
 
 .event-termin-filled .event-termin-day {
@@ -285,7 +285,6 @@ Form
 }
 
 .event-meeting-button {
-    background: linear-gradient(90deg, #d225f8, #ff8103) !important;
     font-weight: bold;
     font-size: medium;
     border-radius: 22px;
@@ -326,7 +325,6 @@ List View Styles
 
 .event-termin-details-header {
     width: 100%;
-    background-image: linear-gradient(to top, #cc208e 0%, #6713d2 100%);
     color: white;
     font-weight: bold;
     font-size: larger;

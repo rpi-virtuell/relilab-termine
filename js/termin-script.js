@@ -1,15 +1,15 @@
 jQuery(document).ready($ => {
 
-$('.relilab-termin-focused').ready($ =>{
+$('.event-termin-focused').ready($ =>{
         $(document).click(function (){
-            $('.relilab-termin-focused').removeClass('relilab-termin-focused');
+            $('.event-termin-focused').removeClass('event-termin-focused');
         });
     })
 
-    $('.relilab-termin-filled').each((i, btn) => {
+    $('.event-termin-filled').each((i, btn) => {
         $(btn).click(function (event) {
-            $('.relilab-termin-details').removeClass('relilab-termin-focused');
-            $(btn).find('.relilab-termin-details').addClass('relilab-termin-focused');
+            $('.event-termin-details').removeClass('event-termin-focused');
+            $(btn).find('.event-termin-details').addClass('event-termin-focused');
             event.stopPropagation();
         });
     })
