@@ -305,7 +305,7 @@ class Event_Termin_Calendar
                                 $term_classes = $term . '-termin ';
                             }
                             if (empty($term_classes)) {
-                                $term_classes = 'default-termin';
+                                $term_classes = 'uncategorized-termin';
                             }
                             //TODO maybe implement check if class is avaialable in event_type_style css
                         }
@@ -445,13 +445,22 @@ class Event_Termin_Calendar
                         <?php
                     }
 
+                    $terms = wp_get_post_terms($currentPost->ID, 'category', array('fields' => 'slugs'));
+                    $term_classes = '';
+                    foreach ($terms as $term) {
+                        $term_classes = $term . '-termin ';
+                    }
+                    if (empty($term_classes)) {
+                        $term_classes = 'uncategorized-termin';
+                    }
+
                     if (!$sameDay) {
                         ?>
                         <div class="event-list-termin-box">
                         <?php
                     }
                     ?>
-                    <div class="event-termin-details-header">
+                    <div class="event-termin-details-header <?php echo $term_classes ?>">
                         <?php if (!$sameDay) {
                             echo Event_Termin_Calendar::get_wochentag(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true)) . ' ' .
                                 date('j', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) . '. ' .
@@ -460,7 +469,7 @@ class Event_Termin_Calendar
                         <?php } ?>
                         <?php echo date('H:i', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_start_date_field(), true))) . ' - ' . date('H:i', strtotime(get_post_meta(get_the_ID(), EventCalendarAdmin::get_termin_end_date_field(), true))) ?>
                     </div>
-                    <div class="event-termin-content">
+                    <div class="event-termin-content <?php echo $term_classes ?>">
                         <div class="event-termin-thumbnail"
                              style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>')">
                             <div class="event-termin-post-details">
