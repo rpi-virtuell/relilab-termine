@@ -42,7 +42,7 @@ class RelilabTermine
             $enddate = get_post_meta($id, "relilab_enddate", true);
 
             if (is_single() && !empty($startdate) && !empty($enddate)) {
-                $content = "<p> Datum : <b>" . date('d.m.Y H:i', strtotime($startdate)) . " - " . date('H:i', strtotime($enddate)) . " </b>   <br>   <a style='font-weight: bold' href='" . $zoom_link . "'>Zoom Link</a> </p>$content";
+                $content = "<p> Datum : <b>" . date('d.m.Y H:i', strtotime($startdate)) . " - " . date('H:i', strtotime($enddate)) . " </b>   <br><br>   <a class='button' style='font-weight: bold' href='" . $zoom_link . "'>👉 Zur Veranstaltung 👈</a> </p>$content";
 
             }
         }
